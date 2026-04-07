@@ -18,6 +18,8 @@
                 <tr>
                     <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Device & Manufacturer
                     </th>
+                    <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Assigned To
+                    </th>
                     <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">OS & Version</th>
                     <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Type</th>
                     <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">Actions
@@ -31,6 +33,19 @@
                     <td class="px-6 py-4">
                         <div class="font-bold text-gray-900 dark:text-white">{{ device.name }}</div>
                         <div class="text-xs text-gray-400 font-medium">{{ device.manufacturer }}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        @if (device.assignedToUser) {
+                        <div class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ device.assignedToUser.name
+                            }}
+                        </div>
+                        <div class="text-[10px] text-gray-400 font-bold">{{ device.assignedToUser.email }}</div>
+                        } @else {
+                        <span
+                            class="inline-flex items-center px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-tight bg-yellow-100 text-gray-600 dark:bg-yellow-800 dark:text-gray-400">
+                            Unassigned
+                        </span>
+                        }
                     </td>
                     <td class="px-6 py-4">
                         <div class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ device.operatingSystem }}
