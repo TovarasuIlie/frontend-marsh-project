@@ -6,6 +6,7 @@ import { map, ReplaySubject } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { LoggedUser } from '../models/logged-user';
 import { Router } from '@angular/router';
+import { RegisterForm } from '../models/register-form';
 
 @Injectable({
 	providedIn: 'root'
@@ -27,6 +28,10 @@ export class AuthService {
 				}
 			})
 		)
+	}
+
+	register(registerForm: RegisterForm) {
+		return this.http.post<LoggedUser>(environment.API_URL + "Auth/register-user", registerForm);
 	}
 
 	logout() {

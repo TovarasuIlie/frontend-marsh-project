@@ -5,17 +5,19 @@ import { ThemeService } from '../../../services/theme.service';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { ToastService } from '../../../services/toast.service';
+import { AlertComponent } from "../../ui/alert/alert.component";
 
 @Component({
 	selector: 'app-login-page',
 	standalone: true,
-	imports: [CommonModule, ReactiveFormsModule, RouterModule],
+	imports: [CommonModule, ReactiveFormsModule, RouterModule, AlertComponent],
 	templateUrl: './login-page.component.html',
 	styleUrl: './login-page.component.css'
 })
 export class LoginPageComponent implements OnInit {
 	loginForm!: FormGroup;
 	showPassword = signal(false);
+	errorMessage = signal<string | null>(null);
 
 	constructor(private fb: FormBuilder, public themeService: ThemeService, private authService: AuthService, private toastService: ToastService, private router: Router) { }
 
@@ -40,11 +42,15 @@ export class LoginPageComponent implements OnInit {
 					this.router.navigateByUrl("");
 				},
 				error: (err) => {
-					console.log(err);
+					this.errorMessage.set(err.error.message);
 				}
 			})
 		} else {
 			this.loginForm.markAllAsTouched();
 		}
+	}
+
+	handleErrorClose() {
+		this.errorMessage.set(null);
 	}
 }

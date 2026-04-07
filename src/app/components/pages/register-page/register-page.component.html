@@ -11,6 +11,8 @@
             <p class="text-sm text-gray-500 mt-1">Join the ApexBank Management System</p>
         </div>
 
+        <app-alert [message]="errorMessage()" [type]="'error'" (closed)="handleErrorClose()" />
+
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
 
             <div>
