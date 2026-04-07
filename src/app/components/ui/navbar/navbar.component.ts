@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ThemeService } from '../../../services/theme.service';
+import { AuthService } from '../../../services/auth.service';
+import { LoggedUser } from '../../../models/logged-user';
 
 @Component({
 	selector: 'app-navbar',
@@ -11,10 +13,5 @@ import { ThemeService } from '../../../services/theme.service';
 })
 export class NavbarComponent {
 
-	loggedUser = {
-		fullname: "Test",
-		email: "test@test.com"
-	}
-
-	constructor(public themeService: ThemeService) {}
+	constructor(public themeService: ThemeService, public authService: AuthService) { }
 }

@@ -3,11 +3,16 @@ import { PageLayoutComponent } from './components/page-layout/page-layout.compon
 import { IndexPageComponent } from './components/pages/index-page/index-page.component';
 import { InventoryPageComponent } from './components/pages/inventory-page/inventory-page.component';
 import { AssignmentPageComponent } from './components/pages/assignment-page/assignment-page.component';
+import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
+import { LoginPageComponent } from './components/pages/login-page/login-page.component';
+import { authGuard } from './guards/auth.guard';
+import { guestGuard } from './guards/guest.guard';
 
 export const routes: Routes = [
     {
         path: "",
         component: PageLayoutComponent,
+        canActivate: [authGuard],
         children: [
             {
                 path: "",
@@ -22,5 +27,15 @@ export const routes: Routes = [
                 component: AssignmentPageComponent
             }
         ]
+    },
+    {
+        path: "register",
+        component: RegisterPageComponent,
+        canActivate: [guestGuard]
+    },
+    {
+        path: "login",
+        component: LoginPageComponent,
+        canActivate: [guestGuard]
     }
 ];

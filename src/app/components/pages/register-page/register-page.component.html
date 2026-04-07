@@ -1,0 +1,76 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 p-6">
+    <div
+        class="w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 p-8 animate-in fade-in zoom-in-95 duration-500">
+
+        <div class="text-center mb-8">
+            <div
+                class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white mb-4 shadow-lg shadow-blue-600/20">
+                <span class="material-icons">person_add</span>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Create Account</h2>
+            <p class="text-sm text-gray-500 mt-1">Join the ApexBank Management System</p>
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+
+            <div>
+                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block">Full
+                    Name</label>
+                <input type="text" formControlName="name" placeholder="Enter your name"
+                    [class.border-red-500]="isInvalid('name')"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 text-sm outline-none focus:border-blue-500 transition-all dark:text-white">
+                @if (isInvalid('name')) {
+                <p class="text-[10px] text-red-500 mt-1 font-bold">The name is required!</p>
+                }
+            </div>
+
+            <div>
+                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block">Email
+                    Address</label>
+                <input type="email" formControlName="email" placeholder="email@apexbank.com"
+                    [class.border-red-500]="isInvalid('email')"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 text-sm outline-none focus:border-blue-500 transition-all dark:text-white">
+                @if (isInvalid('email')) {
+                <p class="text-[10px] text-red-500 mt-1 font-bold">Please enter a valid email address!</p>
+                }
+            </div>
+
+            <div>
+                <label
+                    class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block">Password</label>
+                <input type="password" formControlName="password" placeholder="••••••••"
+                    [class.border-red-500]="isInvalid('password')"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 text-sm outline-none focus:border-blue-500 transition-all dark:text-white">
+                @if (isInvalid('password')) {
+                <p class="text-[10px] text-red-500 mt-1 font-bold">The password is required!</p>
+                }
+            </div>
+
+            <div>
+                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block">Work
+                    Location</label>
+                <select formControlName="location" [class.border-red-500]="isInvalid('location')"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 text-sm outline-none focus:border-blue-500 transition-all dark:text-white cursor-pointer">
+                    <option value="" disabled selected>Select location</option>
+                    <option value="London HQ">London HQ</option>
+                    <option value="New York">New York Office</option>
+                    <option value="Remote">Remote</option>
+                </select>
+                @if (isInvalid('location')) {
+                <p class="text-[10px] text-red-500 mt-1 font-bold">The location is required!</p>
+                }
+            </div>
+
+            <button type="submit" [disabled]="registerForm.invalid"
+                class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-gray-800 text-white py-4 rounded-xl font-bold text-sm shadow-lg shadow-blue-600/20 transition-all mt-4">
+                Register Account
+            </button>
+
+            <p class="text-center text-xs text-gray-500 mt-6">
+                Already have an account?
+                <a routerLink="/login" class="text-blue-600 font-bold hover:underline">Sign In</a>
+            </p>
+
+        </form>
+    </div>
+</div>

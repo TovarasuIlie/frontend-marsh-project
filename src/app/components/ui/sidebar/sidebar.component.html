@@ -59,6 +59,7 @@
             }
 
             <button 
+                (click)="authService.logout()"
                 class="flex items-center rounded-xl text-sm font-semibold w-full text-red-500 hover:text-white hover:bg-red-600 transition-all group overflow-hidden whitespace-nowrap mt-1"
                 [class.gap-4]="!sidebarService.isCollapsed()" [class.px-3]="!sidebarService.isCollapsed()"
                 [class.py-2.5]="!sidebarService.isCollapsed()"
