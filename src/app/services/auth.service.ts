@@ -7,6 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 import { LoggedUser } from '../models/logged-user';
 import { Router } from '@angular/router';
 import { RegisterForm } from '../models/register-form';
+import { User } from '../models/user';
 
 @Injectable({
 	providedIn: 'root'
@@ -32,6 +33,10 @@ export class AuthService {
 
 	register(registerForm: RegisterForm) {
 		return this.http.post<LoggedUser>(environment.API_URL + "Auth/register-user", registerForm);
+	}
+
+	getUserOverview() {
+		return this.http.get<User>(environment.API_URL + "Auth/user-overview");
 	}
 
 	logout() {

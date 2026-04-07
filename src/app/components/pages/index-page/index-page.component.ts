@@ -1,34 +1,48 @@
 import { Component, computed, signal } from '@angular/core';
+import { UserRole } from '../../../enums/user-role';
+import { USER_ROLE_DETAILS } from '../../../mappers/user-role.mapper';
+import { CommonModule } from '@angular/common';
+import { User } from '../../../models/user';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
 	selector: 'app-index-page',
 	standalone: true,
-	imports: [],
+	imports: [CommonModule],
 	templateUrl: './index-page.component.html',
 	styleUrl: './index-page.component.css'
 })
 export class IndexPageComponent {
-	devices = signal<any[]>([
-		{ id: 1, type: 1, manufacturer: 'Apple', status: 'Available' },
-		{ id: 2, type: 3, manufacturer: 'Dell', status: 'In Use' },
-		{ id: 3, type: 2, manufacturer: 'Apple', status: 'In Use' },
-		{ id: 4, type: 1, manufacturer: 'Samsung', status: 'Maintenance' },
-		{ id: 5, type: 3, manufacturer: 'Apple', status: 'Available' },
-	]);
+	userData = signal<User | null>(null);
 
-	// Derived Stats
-	totalAssets = computed(() => this.devices().length);
+	constructor(private authService: AuthService) {
+		this.authService.getUserOverview().subscribe(value => {
+			this.userData.set(value);
+		})
+	}
 
-	inUseCount = computed(() =>
-		this.devices().filter(d => d.status === 'In Use').length
-	);
+	uniqueManufacturers = computed(() => {
+		const devices = this.userData()?.devices || [];
+		const distinct = [...new Set(devices.map((d: any) => d.manufacturer))];
 
-	maintenanceCount = computed(() =>
-		this.devices().filter(d => d.status === 'Maintenance').length
-	);
-
-	availabilityRate = computed(() => {
-		const available = this.devices().filter(d => d.status === 'Available').length;
-		return Math.round((available / this.totalAssets()) * 100);
+		return distinct;
 	});
+
+	getBrandPercent(brand: string): number {
+		const total = this.userData()?.devices?.length;
+		if (total === 0 || total === undefined) return 0;
+		const count = this.userData()?.devices?.filter((d: any) => d.manufacturer === brand).length || 0;
+		return Math.round((count / total) * 100);
+	}
+
+	roleInfo = computed(() => {
+		const roleId = this.userData()?.role as UserRole;
+		return USER_ROLE_DETAILS[roleId] || USER_ROLE_DETAILS[UserRole.Employee];
+	});
+
+	getDeviceIcon(type: number): string {
+		if (type === 2) return 'smartphone';
+		if (type === 3) return 'laptop_mac';
+		return 'devices';
+	}
 }

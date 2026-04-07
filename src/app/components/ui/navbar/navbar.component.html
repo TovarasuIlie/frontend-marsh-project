@@ -1,4 +1,5 @@
-<header class="h-16 border-b border-gray-100 bg-white/80 px-8 backdrop-blur-md dark:border-gray-800 dark:bg-gray-950/80 flex items-center justify-between z-10">
+<header
+    class="h-16 border-b border-gray-100 bg-white/80 px-8 backdrop-blur-md dark:border-gray-800 dark:bg-gray-950/80 flex items-center justify-between z-10">
 
     <div class="flex items-center gap-4">
         <h1 class="text-sm font-bold text-gray-900 dark:text-white tracking-tight uppercase opacity-50">
@@ -7,7 +8,7 @@
     </div>
 
     <div class="flex items-center gap-6">
-        
+
         <button (click)="themeService.toggleTheme()"
             class="rounded-full p-2 text-gray-500 hover:bg-gray-100 transition-all dark:text-gray-400 dark:hover:bg-gray-800">
             @if (themeService.darkMode()) {
@@ -27,15 +28,36 @@
 
         <div class="h-8 w-[1px] bg-gray-100 dark:bg-gray-800"></div>
 
-        @if (authService.user$ | async; as user) {
-        <div class="flex items-center gap-3">
-            <div class="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs">
-                {{ user.name.charAt(0) }}
+        @if (loggedUser; as user) {
+        <div
+            class="flex items-center gap-4 group cursor-pointer p-1 pr-4 rounded-2xl transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-900/50">
+
+            <div class="relative">
+                <div
+                    class="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-sm shadow-lg shadow-blue-500/20 z-10 relative overflow-hidden">
+                    {{ user.name.charAt(0) }}
+                    <div
+                        class="absolute inset-0 bg-white/10 group-hover:translate-x-full transition-transform duration-700 -skew-x-12">
+                    </div>
+                </div>
             </div>
-            <div class="text-left hidden sm:block">
-                <p class="text-xs font-bold text-gray-900 dark:text-white leading-none">{{ user.role }}</p>
-                <p class="text-xs font-bold text-gray-900 dark:text-white leading-none">{{ user.name }}</p>
-                <p class="text-[10px] text-gray-500 font-medium mt-1">{{ user.email }}</p>
+
+            <div class="text-left hidden sm:flex flex-col gap-1">
+                <div class="flex items-center gap-2">
+                    <p
+                        class="text-[13px] font-black text-gray-900 dark:text-white leading-none tracking-tight group-hover:text-blue-600 transition-colors">
+                        {{ user.name }}
+                    </p>
+                </div>
+
+                <div class="flex items-center">
+                    <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-md border border-transparent transition-all duration-300 group-hover:border-current/20"
+                        [ngClass]="roleInfo().badgeClass">
+                        <span class="text-[8px] font-black uppercase tracking-[0.2em]">
+                            {{ roleInfo().label }}
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
         }
