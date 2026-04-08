@@ -13,22 +13,34 @@ export class DeviceService {
 	constructor(private http: HttpClient) { }
 
 	getAllDevices(pageNumber: number = 1, pageSize: number = 5) {
-		return this.http.get<PagedResult<Device>>(environment.API_URL + "Devices?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+		return this.http.get<PagedResult<Device>>(environment.API_URL + "Device/get-devices?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+	}
+
+	getAllUnassignedDevices(pageNumber: number = 1, pageSize: number = 5) {
+		return this.http.get<PagedResult<Device>>(environment.API_URL + "Device/get-devices-overview?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
 	}
 
 	getDeviceById(deviceId: number) {
-		return this.http.get<Device>(environment.API_URL + "Devices/" + deviceId);
+		return this.http.get<Device>(environment.API_URL + "Device/get-device/" + deviceId);
 	}
 
 	addNewDevice(device: Device) {
-		return this.http.post<Device>(environment.API_URL + "Devices", device);
+		return this.http.post<Device>(environment.API_URL + "Device/add-device", device);
 	}
 
 	deleteDevice(deviceId: number) {
-		return this.http.delete(environment.API_URL + "Devices/" + deviceId);
+		return this.http.delete(environment.API_URL + "Device/delete-device/" + deviceId);
 	}
 
 	editDevice(deviceId: number, editedDevice: EditDeviceForm) {
-		return this.http.put<Device>(environment.API_URL + "Devices/" + deviceId, editedDevice);
+		return this.http.patch<Device>(environment.API_URL + "Device/edit-device/" + deviceId, editedDevice);
+	}
+
+	getDeviceDescriptionGenerated(deviceId: number) {
+		return this.http.get<any>(environment.API_URL + "Device/generate-response/" + deviceId);
+	}
+
+	toggleDeviceAssignStatus(deviceId: number) {
+		return this.http.patch(environment.API_URL + "Device/toggle-device-assign-status/" + deviceId, {});
 	}
 }

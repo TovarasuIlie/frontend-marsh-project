@@ -1,4 +1,4 @@
-@if (isOpen) {
+@if (isOpen && device) {
 <div class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6">
     <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm animate-in fade-in duration-300"
         (click)="closeModal()"></div>
@@ -8,7 +8,7 @@
 
         <div class="flex justify-between items-center px-10 py-8 border-b border-gray-50 dark:border-gray-900/50">
             <div>
-                <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-1 block">Inventory</span>
+                <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-1 block">Assignment Manager</span>
                 <h3 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Device Specifications</h3>
             </div>
             <button type="button" (click)="closeModal()"
@@ -63,10 +63,26 @@
                 </p>
             </div>
 
-            <div class="flex pt-4">
-                <button (click)="closeModal()"
+            @if(deviceDescription()) {
+                <div class="pt-4 border-t border-gray-50 dark:border-gray-900">
+                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">AI
+                    Description</span>
+                <p
+                    class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed italic bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl">
+                    {{ deviceDescription().message }}
+                </p>
+            </div>
+            }
+
+            <div class="flex gap-3 pt-4">
+                <button (click)="generateDeviceDescription()"
                     class="flex-1 px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-800 text-sm font-bold text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all">
-                    Close
+                    AI Device Description
+                </button>
+                <button
+                    (click)="toggleAssignStatus(device.id)"
+                    class="flex-1 px-6 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-bold shadow-lg shadow-green-600/20 transition-all">
+                    Assign This Device
                 </button>
             </div>
         </div>
