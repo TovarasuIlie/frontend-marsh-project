@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostListener, signal } from '@angular/core';
 import { SideBarService } from '../../../services/side-bar.service';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
@@ -26,19 +26,7 @@ export class SidebarComponent {
 
 	expandedMenu = signal<string | null>(null);
 
-	constructor(public sidebarService: SideBarService, private router: Router, public authService: AuthService) {
-		this.router.events.pipe(
-			filter(event => event instanceof NavigationEnd)
-		).subscribe(() => {
-			this.closeOnMobile();
-		});
-	}
-
-	private closeOnMobile() {
-		if (window.innerWidth < 768) {
-			this.sidebarService.isCollapsed.set(true);
-		}
-	}
+	constructor(public sidebarService: SideBarService, public authService: AuthService) { }
 
 	toggleSidebar() {
 		this.sidebarService.toggle();
@@ -46,5 +34,14 @@ export class SidebarComponent {
 
 	isDesktop() {
 		return window.innerWidth >= 768;
+	}
+
+	@HostListener('window:resize')
+	onResize() {
+		if(window.innerWidth < 768) {
+			this.sidebarService.isCollapsed.set(true);
+		} else {
+			this.sidebarService.isCollapsed.set(false);
+		}
 	}
 }

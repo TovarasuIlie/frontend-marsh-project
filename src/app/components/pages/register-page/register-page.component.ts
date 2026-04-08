@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ThemeService } from '../../../services/theme.service';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -17,6 +17,8 @@ import { AlertComponent } from "../../ui/alert/alert.component";
 export class RegisterPageComponent implements OnInit {
 	registerForm!: FormGroup;
 	errorMessage = signal<string | null>(null);
+	showPassword = signal<boolean>(false);
+	showConfirmPassword = signal<boolean>(false);
 
 	constructor(private fb: FormBuilder, public themeService: ThemeService, private authService: AuthService, private toastService: ToastService, private router: Router) { }
 
@@ -24,8 +26,12 @@ export class RegisterPageComponent implements OnInit {
 		this.registerForm = this.fb.group({
 			name: ['', [Validators.required]],
 			email: ['', [Validators.required, Validators.email]],
-			password: ['', [Validators.required, Validators.minLength(6)]],
+			password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[0-9])(?=.*[!@#$%^&*])/)]],
+			confirmPassword: ['', [Validators.required]],
 			location: ['', [Validators.required]]
+		},
+		{
+			validators: this.passwordMatchValidator
 		});
 	}
 
@@ -43,7 +49,6 @@ export class RegisterPageComponent implements OnInit {
 				},
 				error: (err) => {
 					this.errorMessage.set(err.error.message);
-					console.log(err);
 				}
 			})
 		} else {
@@ -53,5 +58,22 @@ export class RegisterPageComponent implements OnInit {
 
 	handleErrorClose() {
 		this.errorMessage.set(null);
+	}
+
+	passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+		const password = control.get('password');
+		const confirmPassword = control.get('confirmPassword');
+
+		if (!confirmPassword?.value) return null;
+
+		if (password && confirmPassword && password.value !== confirmPassword.value) {
+			confirmPassword.setErrors({ mismatch: true });
+			return { mismatch: true };
+		} else {
+			if (confirmPassword.hasError('mismatch')) {
+				confirmPassword.setErrors(null);
+			}
+			return null;
+		}
 	}
 }

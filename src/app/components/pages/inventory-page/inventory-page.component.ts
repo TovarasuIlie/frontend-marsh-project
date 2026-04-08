@@ -6,11 +6,12 @@ import { PagedResult, PaginationMetadata } from '../../../models/paged-result';
 import { AddNewDeviceModalComponent } from "./add-new-device-modal/add-new-device-modal.component";
 import { DeleteDeviceModalComponent } from "./delete-device-modal/delete-device-modal.component";
 import { EditDeviceModalComponent } from "./edit-device-modal/edit-device-modal.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
 	selector: 'app-inventory-page',
 	standalone: true,
-	imports: [DetailsModalComponent, AddNewDeviceModalComponent, DeleteDeviceModalComponent, EditDeviceModalComponent],
+	imports: [CommonModule, DetailsModalComponent, AddNewDeviceModalComponent, DeleteDeviceModalComponent, EditDeviceModalComponent],
 	templateUrl: './inventory-page.component.html',
 	styleUrl: './inventory-page.component.css'
 })
@@ -20,7 +21,7 @@ export class InventoryPageComponent {
 
 	paginationMetadata = signal<PaginationMetadata | null>(null);
 	currentPage: number = 1;
-	pageSize: number = 5;
+	pageSize: number = 20;
 
 	selectedDeviceId = signal<number | null>(null);
 	selectedDevice = signal<Device | null>(null);

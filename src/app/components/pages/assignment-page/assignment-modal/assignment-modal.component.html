@@ -1,92 +1,102 @@
 @if (isOpen && device) {
-<div class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6">
-    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm animate-in fade-in duration-300"
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+    <div class="absolute inset-0 bg-gray-900/60 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-500"
         (click)="closeModal()"></div>
 
-    <div
-        class="relative w-full max-w-lg bg-white dark:bg-gray-950 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden animate-in zoom-in-95 fade-in duration-300">
+    <div class="relative w-full max-w-lg bg-white dark:bg-[#0f1115] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-gray-800/50 overflow-hidden animate-in zoom-in-95 fade-in duration-300">
 
-        <div class="flex justify-between items-center px-10 py-8 border-b border-gray-50 dark:border-gray-900/50">
+        <div class="flex justify-between items-center px-8 py-6 border-b border-gray-50 dark:border-gray-900/50">
             <div>
-                <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-1 block">Assignment Manager</span>
-                <h3 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Device Specifications</h3>
+                <span class="text-[9px] font-black text-blue-600 uppercase tracking-[0.3em] mb-1 block">Assignment Manager</span>
+                <h3 class="text-xl font-black text-gray-900 dark:text-white tracking-tight">Device Specifications</h3>
             </div>
             <button type="button" (click)="closeModal()"
-                class="h-12 w-12 flex items-center justify-center rounded-2xl bg-gray-50 dark:bg-gray-900 text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-all duration-300">
-                <span class="material-icons">close</span>
+                class="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-900 text-gray-400 hover:text-red-500 transition-all duration-300">
+                <span class="material-icons text-lg">close</span>
             </button>
         </div>
 
-        @if (device) {
         <div class="p-8 space-y-6">
-            <div
-                class="flex items-center gap-4 p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100/50 dark:border-blue-800/30">
-                <div
-                    class="h-12 w-12 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
-                    <span class="material-icons">{{ device.type === 3 ? 'laptop' : 'smartphone'
-                        }}</span>
+            <div class="flex items-center gap-4 p-5 rounded-xl bg-gradient-to-br from-blue-50/50 to-white dark:from-blue-900/10 dark:to-transparent border border-blue-100/30 dark:border-blue-800/20">
+                <div class="h-14 w-14 flex-shrink-0 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+                    <span class="material-icons text-2xl">
+                        {{ device.type === 3 ? 'laptop' : 'smartphone' }}
+                    </span>
                 </div>
                 <div>
-                    <p class="text-lg font-bold text-gray-900 dark:text-white leading-tight">{{
-                        device.name }}</p>
-                    <p class="text-sm text-gray-500 font-medium">{{ device.manufacturer }}</p>
+                    <h4 class="text-lg font-black text-gray-900 dark:text-white leading-tight">{{ device.name }}</h4>
+                    <p class="text-[9px] font-black text-blue-600 uppercase tracking-[0.2em] mt-1">{{ device.manufacturer }}</p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-x-8 gap-y-6 px-1">
                 <div class="space-y-1">
-                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Processor</span>
-                    <p class="text-sm font-semibold dark:text-white">{{ device.processor }}</p>
+                    <div class="flex items-center gap-2 text-gray-400">
+                        <span class="material-icons text-[14px]">memory</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest">Processor</span>
+                    </div>
+                    <p class="text-sm font-bold text-gray-900 dark:text-gray-200 ml-5.5">{{ device.processor }}</p>
                 </div>
+
                 <div class="space-y-1">
-                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Memory</span>
-                    <p class="text-sm font-semibold dark:text-white">{{ device.ramAmount }} GB RAM
-                    </p>
+                    <div class="flex items-center gap-2 text-gray-400">
+                        <span class="material-icons text-[14px]">storage</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest">Memory</span>
+                    </div>
+                    <p class="text-sm font-bold text-gray-900 dark:text-gray-200 ml-5.5">{{ device.ramAmount }} GB RAM</p>
                 </div>
+
                 <div class="space-y-1">
-                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">OS
-                        Environment</span>
-                    <p class="text-sm font-semibold dark:text-white">{{ device.operatingSystem }}</p>
+                    <div class="flex items-center gap-2 text-gray-400">
+                        <span class="material-icons text-[14px]">settings_input_component</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest">Environment</span>
+                    </div>
+                    <p class="text-sm font-bold text-gray-900 dark:text-gray-200 ml-5.5">{{ device.operatingSystem }}</p>
                 </div>
+
                 <div class="space-y-1">
-                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">OS Build</span>
-                    <p class="text-sm font-semibold dark:text-white">v{{ device.osVersion }}</p>
+                    <div class="flex items-center gap-2 text-gray-400">
+                        <span class="material-icons text-[14px]">terminal</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest">Build Version</span>
+                    </div>
+                    <p class="text-sm font-bold text-gray-900 dark:text-gray-200 ml-5.5">v{{ device.osVersion }}</p>
                 </div>
             </div>
 
-            <div class="pt-4 border-t border-gray-50 dark:border-gray-900">
-                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">Internal
-                    Description</span>
-                <p
-                    class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed italic bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl">
-                    {{ device.description }}
-                </p>
-            </div>
+            <div class="space-y-4 pt-4 border-t border-gray-50 dark:border-gray-900">
+                <div>
+                    <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2 block ml-1">Internal Description</span>
+                    <div class="bg-gray-50/50 dark:bg-gray-900/40 p-4 rounded-xl border border-gray-100/50 dark:border-gray-800/50">
+                        <p class="text-[12px] text-gray-600 dark:text-gray-400 leading-relaxed italic font-medium">"{{ device.description }}"</p>
+                    </div>
+                </div>
 
-            @if(deviceDescription()) {
-                <div class="pt-4 border-t border-gray-50 dark:border-gray-900">
-                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">AI
-                    Description</span>
-                <p
-                    class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed italic bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl">
-                    {{ deviceDescription().message }}
-                </p>
+                @if(deviceDescription()) {
+                <div class="animate-in slide-in-from-top-2 duration-500">
+                    <span class="text-[9px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest mb-2 block ml-1 flex items-center gap-1">
+                        <span class="material-icons text-[12px]">auto_awesome</span>
+                        AI Generated Analysis
+                    </span>
+                    <div class="bg-purple-50/30 dark:bg-purple-900/10 p-4 rounded-xl border border-purple-100/50 dark:border-purple-800/30">
+                        <p class="text-[12px] text-purple-900 dark:text-purple-200 leading-relaxed font-medium leading-tight">
+                            {{ deviceDescription().message }}
+                        </p>
+                    </div>
+                </div>
+                }
             </div>
-            }
 
             <div class="flex gap-3 pt-4">
                 <button (click)="generateDeviceDescription()"
-                    class="flex-1 px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-800 text-sm font-bold text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all">
-                    AI Device Description
+                    class="flex-1 px-4 py-3.5 rounded-xl border border-gray-200 dark:border-gray-800 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-gray-900 dark:hover:text-white transition-all duration-300">
+                    {{ deviceDescription() ? 'Regenerate AI' : 'AI Analysis' }}
                 </button>
-                <button
-                    (click)="toggleAssignStatus(device.id)"
-                    class="flex-1 px-6 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-bold shadow-lg shadow-green-600/20 transition-all">
-                    Assign This Device
+                <button (click)="toggleAssignStatus(device.id)"
+                    class="flex-1 px-4 py-3.5 rounded-xl bg-gray-950 dark:bg-white text-white dark:text-gray-950 text-[10px] font-black uppercase tracking-widest shadow-xl hover:opacity-90 transition-all active:scale-95">
+                    Confirm Assignment
                 </button>
             </div>
         </div>
-        }
     </div>
 </div>
 }

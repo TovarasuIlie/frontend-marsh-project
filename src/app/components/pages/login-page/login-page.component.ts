@@ -6,11 +6,12 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { ToastService } from '../../../services/toast.service';
 import { AlertComponent } from "../../ui/alert/alert.component";
+import { ToastComponent } from "../../ui/toast/toast.component";
 
 @Component({
 	selector: 'app-login-page',
 	standalone: true,
-	imports: [CommonModule, ReactiveFormsModule, RouterModule, AlertComponent],
+	imports: [CommonModule, ReactiveFormsModule, RouterModule, AlertComponent, ToastComponent],
 	templateUrl: './login-page.component.html',
 	styleUrl: './login-page.component.css'
 })
@@ -24,8 +25,7 @@ export class LoginPageComponent implements OnInit {
 	ngOnInit(): void {
 		this.loginForm = this.fb.group({
 			email: ['', [Validators.required, Validators.email]],
-			password: ['', [Validators.required]],
-			rememberMe: [false]
+			password: ['', [Validators.required]]
 		});
 	}
 

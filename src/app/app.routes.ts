@@ -12,19 +12,21 @@ export const routes: Routes = [
     {
         path: "",
         component: PageLayoutComponent,
-        canActivate: [authGuard],
         children: [
             {
                 path: "",
-                component: IndexPageComponent
+                component: IndexPageComponent,
+                canActivate: [authGuard]
             },
             {
                 path: "inventory",
-                component: InventoryPageComponent
+                component: InventoryPageComponent,
+                canActivate: [authGuard]
             },
             {
                 path: "assignments",
-                component: AssignmentPageComponent
+                component: AssignmentPageComponent,
+                canActivate: [authGuard]
             }
         ]
     },
