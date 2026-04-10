@@ -2,15 +2,16 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import { Device } from '../../../models/device';
 import { DeviceService } from '../../../services/device.service';
-import { PagedResult, PaginationMetadata } from '../../../models/paged-result';
+import { PagedResult, PaginationMetadata, PaginationParameters } from '../../../models/paged-result';
 import { AssignmentModalComponent } from "./assignment-modal/assignment-modal.component";
 import { ToastService } from '../../../services/toast.service';
 import { UnassignConfirmModalComponent } from "./unassign-confirm-modal/unassign-confirm-modal.component";
+import { PaginationComponent } from "../../ui/pagination/pagination.component";
 
 @Component({
 	selector: 'app-assignment-page',
 	standalone: true,
-	imports: [CommonModule, AssignmentModalComponent, UnassignConfirmModalComponent],
+	imports: [CommonModule, AssignmentModalComponent, UnassignConfirmModalComponent, PaginationComponent],
 	templateUrl: './assignment-page.component.html',
 	styleUrl: './assignment-page.component.css'
 })
@@ -24,9 +25,11 @@ export class AssignmentPageComponent {
 	isConfirmationModalOpen = false;
 
 	paginationMetadata = signal<PaginationMetadata | null>(null);
-	currentPage: number = 1;
-	pageSize: number = 8;
-	pageSizeOptions = [8, 12, 24];
+	pageSizeOptions = [8, 12, 24, 36];
+	paginationParameters: PaginationParameters = {
+		pageNumber: 1,
+		pageSize: this.pageSizeOptions[0]
+	}
 
 
 	constructor(private deviceService: DeviceService, private toastService: ToastService) {
@@ -34,7 +37,7 @@ export class AssignmentPageComponent {
 	}
 
 	loadDevices() {
-		this.deviceService.getAllUnassignedDevices(this.currentPage, this.pageSize).subscribe({
+		this.deviceService.getAllUnassignedDevices(this.paginationParameters.pageNumber, this.paginationParameters.pageSize).subscribe({
 			next: (value: PagedResult<Device>) => {
 				this.devices.set(value.data);
 				this.paginationMetadata.set(value.metadata);
@@ -84,28 +87,8 @@ export class AssignmentPageComponent {
 		})
 	}
 
-	goToPage(page: number) {
-		this.currentPage = page;
-		this.loadDevices();
-	}
-
-	nextPage() {
-		if (this.paginationMetadata()?.hasNext) {
-			this.currentPage++;
-		}
-		this.loadDevices();
-	}
-
-	prevPage() {
-		if (this.paginationMetadata()?.hasPrevious && this.currentPage > 1) {
-			this.currentPage--;
-		}
-		this.loadDevices();
-	}
-
-	onPageSizeChange(pageSize: number) {
-		this.pageSize = pageSize;
-		this.currentPage = 1;
+	paginationChange(paginationParameters: PaginationParameters) {
+		this.paginationParameters = paginationParameters;
 		this.loadDevices();
 	}
 }

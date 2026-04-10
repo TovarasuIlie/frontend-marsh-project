@@ -1,0 +1,57 @@
+<div class="flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
+            <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Page Size</span>
+            <div class="flex p-1 bg-gray-50 dark:bg-gray-950 rounded-lg border border-gray-100 dark:border-gray-800">
+                @for (size of pageSizeOptions; track size) {
+                <button (click)="onPageSizeChange(size)" [class.bg-white]="paginationParameters.pageSize === size"
+                    [class.dark:bg-gray-800]="paginationParameters.pageSize === size"
+                    [class.shadow-sm]="paginationParameters.pageSize === size"
+                    class="px-3 py-1 text-[9px] font-black rounded-md transition-all dark:text-gray-400">
+                    {{ size }}
+                </button>
+                }
+            </div>
+        </div>
+        <div class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">
+            Showing 
+            <span class="text-gray-900 dark:text-white">{{ ((paginationMetadata()?.currentPage ?? 1) - 1) * paginationParameters.pageSize + 1 }}</span> 
+            — 
+            <span class="text-gray-900 dark:text-white">{{ ((paginationMetadata()?.currentPage ?? 1) * paginationParameters.pageSize <= (paginationMetadata()?.totalCount ?? 1)) ? (paginationMetadata()?.currentPage ?? 1) * paginationParameters.pageSize : paginationMetadata()?.totalCount }}</span> 
+            of 
+            {{ paginationMetadata()?.totalCount }}
+        </div>
+    </div>
+
+    <div class="flex gap-1.5 justify-end">
+        <button (click)="prevPage()" [disabled]="paginationParameters.pageNumber === 1"
+            class="h-8 w-8 flex items-center justify-center rounded-lg border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 text-gray-400 hover:text-blue-600 disabled:opacity-20 transition-all">
+            <span class="material-icons text-base">chevron_left</span>
+        </button>
+
+        @for (page of visiblePages(); track $index) {
+
+        @if (page === '...') {
+        <span class="flex h-8 w-8 items-center justify-center text-gray-400">
+            <span class="material-icons text-base">more_horiz</span>
+        </span>
+        } @else {
+        <button (click)="goToPage(page)" [ngClass]="{
+          'bg-blue-600 text-white shadow-lg shadow-blue-500/20 border-blue-600': 
+             paginationMetadata()?.currentPage === page,
+          'bg-white dark:bg-gray-950 border-gray-100 dark:border-gray-800 text-gray-400 hover:border-blue-500 hover:text-blue-600': 
+             paginationMetadata()?.currentPage !== page
+        }"
+            class="h-8 w-8 flex items-center justify-center text-[10px] font-black rounded-lg border transition-all duration-200 active:scale-90">
+            {{ page }}
+        </button>
+        }
+        }
+
+        <button (click)="nextPage()"
+            [disabled]="paginationParameters.pageNumber >= (paginationMetadata()?.totalPages ?? 0)"
+            class="h-8 w-8 flex items-center justify-center rounded-lg border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 text-gray-400 hover:text-blue-600 disabled:opacity-20 transition-all">
+            <span class="material-icons text-base">chevron_right</span>
+        </button>
+    </div>
+</div>

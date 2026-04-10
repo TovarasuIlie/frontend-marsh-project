@@ -11,3 +11,8 @@ export interface PaginationMetadata {
     hasNext: boolean,
     hasPrevious: boolean
 }
+
+export interface PaginationParameters {
+    pageNumber: number,
+    pageSize: number
+}

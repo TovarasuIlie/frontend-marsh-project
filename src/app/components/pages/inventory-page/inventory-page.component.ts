@@ -2,16 +2,17 @@ import { Component, computed, signal } from '@angular/core';
 import { Device } from '../../../models/device';
 import { DeviceService } from '../../../services/device.service';
 import { DetailsModalComponent } from "./details-modal/details-modal.component";
-import { PagedResult, PaginationMetadata } from '../../../models/paged-result';
+import { PagedResult, PaginationMetadata, PaginationParameters } from '../../../models/paged-result';
 import { AddNewDeviceModalComponent } from "./add-new-device-modal/add-new-device-modal.component";
 import { DeleteDeviceModalComponent } from "./delete-device-modal/delete-device-modal.component";
 import { EditDeviceModalComponent } from "./edit-device-modal/edit-device-modal.component";
 import { CommonModule } from '@angular/common';
+import { PaginationComponent } from "../../ui/pagination/pagination.component";
 
 @Component({
 	selector: 'app-inventory-page',
 	standalone: true,
-	imports: [CommonModule, DetailsModalComponent, AddNewDeviceModalComponent, DeleteDeviceModalComponent, EditDeviceModalComponent],
+	imports: [CommonModule, DetailsModalComponent, AddNewDeviceModalComponent, DeleteDeviceModalComponent, EditDeviceModalComponent, PaginationComponent],
 	templateUrl: './inventory-page.component.html',
 	styleUrl: './inventory-page.component.css'
 })
@@ -20,8 +21,11 @@ export class InventoryPageComponent {
 	devices = signal<Device[]>([]);
 
 	paginationMetadata = signal<PaginationMetadata | null>(null);
-	currentPage: number = 1;
-	pageSize: number = 20;
+	pageSizeOptions = [10, 20, 50, 100];
+	paginationParameters: PaginationParameters = {
+		pageNumber: 1,
+		pageSize: this.pageSizeOptions[0]
+	}
 
 	selectedDeviceId = signal<number | null>(null);
 	selectedDevice = signal<Device | null>(null);
@@ -38,7 +42,7 @@ export class InventoryPageComponent {
 	}
 
 	loadDevices() {
-		this.deviceService.getAllDevices(this.currentPage, this.pageSize).subscribe({
+		this.deviceService.getAllDevices(this.paginationParameters.pageNumber, this.paginationParameters.pageSize).subscribe({
 			next: (value: PagedResult<Device>) => {
 				this.devices.set(value.data);
 				this.paginationMetadata.set(value.metadata);
@@ -78,28 +82,8 @@ export class InventoryPageComponent {
 		this.selectedDeviceId.set(deviceId);
 	}
 
-	goToPage(page: number) {
-		this.currentPage = page;
-		this.loadDevices();
-	}
-
-	nextPage() {
-		if(this.paginationMetadata()?.hasNext) {
-			this.currentPage ++;
-		}
-		this.loadDevices();
-	}
-
-	prevPage() {
-		if(this.paginationMetadata()?.hasPrevious && this.currentPage > 1) {
-			this.currentPage --;
-		}
-		this.loadDevices();
-	}
-
-	onPageSizeChange(event: Event) {
-		this.pageSize = +(event.target as HTMLSelectElement).value;
-		this.currentPage = 1;
+	paginationChange(paginationParameters: PaginationParameters) {
+		this.paginationParameters = paginationParameters;
 		this.loadDevices();
 	}
 }

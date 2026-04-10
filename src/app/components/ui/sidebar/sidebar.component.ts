@@ -15,13 +15,14 @@ import { AuthService } from '../../../services/auth.service';
 export class SidebarComponent {
 
 	menuItems = [
-		{ name: 'Dashboard', icon: 'dashboard', path: '' },
-		{ name: 'Inventory', icon: 'devices', path: '/inventory' },
-		{ name: 'Assignments', icon: 'person_search', path: '/assignments' },
+		{ name: 'Dashboard', icon: 'grid_view', path: '' },
+		{ name: 'Inventory', icon: 'inventory_2', path: '/inventory' },
+		{ name: 'Assignments', icon: 'assignment_ind', path: '/assignments' },
+		{ name: 'Employees', icon: 'groups_3', path: '/employees' },
 	];
 
 	secondaryItems = [
-		{ name: 'Settings', icon: 'settings', path: '/settings' }
+		{ name: 'Settings', icon: 'tune', path: '/settings' }
 	];
 
 	expandedMenu = signal<string | null>(null);

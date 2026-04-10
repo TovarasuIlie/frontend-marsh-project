@@ -119,48 +119,8 @@
         </div>
 
         <div
-            class="px-6 py-4 border-t border-gray-50 dark:border-gray-900 bg-gray-50/20 dark:bg-gray-900/10 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
-                    <span class="text-[9px] font-black text-gray-400 uppercase tracking-wider">Rows</span>
-                    <select (change)="onPageSizeChange($event)" [value]="paginationMetadata()?.pageSize"
-                        class="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 text-[10px] font-bold rounded-lg px-2.5 py-1 outline-none focus:border-blue-500 transition-colors cursor-pointer dark:text-white appearance-none">
-                        <option [value]="20">20</option>
-                        <option [value]="50">50</option>
-                        <option [value]="100">100</option>
-                    </select>
-                </div>
-                <div class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">
-                    Showing <span class="text-gray-900 dark:text-white">01</span> — <span
-                        class="text-gray-900 dark:text-white">{{ paginationMetadata()?.totalPages }}</span> of {{
-                    paginationMetadata()?.totalCount }}
-                </div>
-            </div>
-
-            <div class="flex items-center gap-1.5">
-                <button (click)="prevPage()" [disabled]="paginationMetadata()?.currentPage === 1"
-                    class="h-9 w-9 flex items-center justify-center rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 text-gray-400 hover:text-blue-600 disabled:opacity-30 transition-all">
-                    <span class="material-icons text-base">chevron_left</span>
-                </button>
-
-                <div class="flex gap-1 mx-1">
-                    @for (p of [].constructor(paginationMetadata()?.totalPages); track $index) {
-                    <button (click)="goToPage($index + 1)" [ngClass]="{
-                            'bg-blue-600 text-white shadow-lg shadow-blue-500/20 border-blue-600': 
-                                paginationMetadata()?.currentPage === ($index + 1),
-                            'bg-white dark:bg-gray-950 border-gray-100 dark:border-gray-800 text-gray-400 hover:border-blue-500': 
-                                paginationMetadata()?.currentPage !== ($index + 1)
-                        }" class="h-9 w-9 text-[10px] font-black rounded-xl border transition-all duration-200">
-                        {{ $index + 1 }}
-                    </button>
-                    }
-                </div>
-
-                <button (click)="nextPage()" [disabled]="!paginationMetadata()?.hasNext"
-                    class="h-9 w-9 flex items-center justify-center rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 text-gray-400 hover:text-blue-600 disabled:opacity-30 transition-all">
-                    <span class="material-icons text-base">chevron_right</span>
-                </button>
-            </div>
+            class="px-6 py-4 border-t border-gray-50 dark:border-gray-900 bg-gray-50/20 dark:bg-gray-900/10">
+            <app-pagination [paginationMetadata]="paginationMetadata" [pageSizeOptions]="pageSizeOptions" [paginationParameters]="paginationParameters" (confirm)="paginationChange($event)" />
         </div>
     </div>
 </div>
