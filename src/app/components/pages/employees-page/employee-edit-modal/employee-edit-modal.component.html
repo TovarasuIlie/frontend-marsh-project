@@ -1,0 +1,83 @@
+@if (isOpen) {
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+    <div class="absolute inset-0 bg-gray-900/60 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-500"
+        (click)="closeModal()"></div>
+
+    <app-alert [message]="errorMessage()" [type]="'error'" (closed)="handleErrorClose()" />
+
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()"
+        class="relative w-full max-w-lg bg-white dark:bg-[#0f1115] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-gray-800/50 overflow-hidden animate-in zoom-in-95 fade-in duration-300">
+
+        <div class="flex justify-between items-center px-8 py-6 border-b border-gray-50 dark:border-gray-900/50">
+            <div>
+                <span class="text-[9px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-[0.3em] mb-1 block">Administrative Tool</span>
+                <h3 class="text-xl font-black text-gray-900 dark:text-white tracking-tight">Edit Personnel</h3>
+            </div>
+            <button type="button" (click)="closeModal()"
+                class="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-900 text-gray-400 hover:text-red-500 transition-all duration-300">
+                <span class="material-icons text-lg">close</span>
+            </button>
+        </div>
+
+        @if (employee) {
+        <div class="p-8 space-y-8">
+            <div class="flex items-center gap-5 p-5 rounded-xl bg-gradient-to-br from-emerald-50/50 to-white dark:from-emerald-900/10 dark:to-transparent border border-emerald-100/30 dark:border-emerald-800/20">
+                <div class="h-16 w-16 flex-shrink-0 rounded-2xl bg-emerald-600 flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-emerald-600/20">
+                    {{ employee.name.charAt(0) }}
+                </div>
+                <div class="flex-1 space-y-1">
+                    <label class="text-[8px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest ml-1">Full Identity</label>
+                    <input type="text" formControlName="name"
+                        class="w-full bg-white/50 dark:bg-gray-950/50 border border-emerald-100 dark:border-emerald-800/50 rounded-lg py-2 px-3 text-sm font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                        placeholder="Enter name...">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-x-8 gap-y-6 px-1">
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-gray-400">
+                        <span class="material-icons text-[14px]">badge</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest">Access Level</span>
+                    </div>
+                    <select formControlName="role"
+                        class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 rounded-lg py-2 px-3 text-xs font-bold text-gray-900 dark:text-white focus:border-emerald-500 outline-none cursor-pointer transition-all">
+                        <option [ngValue]="1">Admin</option>
+                        <option [ngValue]="2">Manager</option>
+                        <option [ngValue]="3">Employee</option>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-gray-400">
+                        <span class="material-icons text-[14px]">location_on</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest">Deployment</span>
+                    </div>
+                    <input type="text" formControlName="location"
+                        class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 rounded-lg py-2 px-3 text-xs font-bold text-gray-900 dark:text-white focus:border-emerald-500 outline-none transition-all"
+                        placeholder="City, Country">
+                </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-800/20 flex gap-3">
+                <span class="material-icons text-amber-500 text-xl">security</span>
+                <p class="text-[10px] font-medium text-amber-800 dark:text-amber-400 leading-relaxed">
+                    Elevating roles grants immediate access to sensitive data vaults. Ensure identity is verified before confirming.
+                </p>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button type="button" (click)="closeModal()"
+                    class="flex-1 px-4 py-3.5 rounded-xl bg-gray-100 dark:bg-gray-950 text-gray-500 text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 dark:hover:bg-gray-900 transition-all">
+                    Discard
+                </button>
+                
+                <button type="submit" [disabled]="editForm.invalid"
+                    class="flex-[2] px-8 py-3.5 rounded-xl bg-green-600 shadow-green-200 dark:shadow-green-950 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-20 disabled:grayscale">
+                    Confirm Changes
+                </button>
+            </div>
+        </div>
+        }
+    </form>
+</div>
+}

@@ -4,6 +4,7 @@ import { USER_ROLE_DETAILS } from '../../../mappers/user-role.mapper';
 import { CommonModule } from '@angular/common';
 import { User } from '../../../models/user';
 import { AuthService } from '../../../services/auth.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
 	selector: 'app-index-page',
@@ -15,8 +16,8 @@ import { AuthService } from '../../../services/auth.service';
 export class IndexPageComponent {
 	userData = signal<User | null>(null);
 
-	constructor(private authService: AuthService) {
-		this.authService.getUserOverview().subscribe(value => {
+	constructor(private userService: UserService) {
+		this.userService.getUserOverview().subscribe(value => {
 			this.userData.set(value);
 		})
 	}

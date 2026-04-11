@@ -8,6 +8,7 @@ import { LoggedUser } from '../models/logged-user';
 import { Router } from '@angular/router';
 import { RegisterForm } from '../models/register-form';
 import { User } from '../models/user';
+import { UserRole } from '../enums/user-role';
 
 @Injectable({
 	providedIn: 'root'
@@ -33,10 +34,6 @@ export class AuthService {
 
 	register(registerForm: RegisterForm) {
 		return this.http.post<LoggedUser>(environment.API_URL + "Auth/register-user", registerForm);
-	}
-
-	getUserOverview() {
-		return this.http.get<User>(environment.API_URL + "Auth/user-overview");
 	}
 
 	logout() {
@@ -79,6 +76,15 @@ export class AuthService {
 		return user.token;
 	}
 
+	getUserRole() {
+		const storedData = localStorage.getItem(environment.USER_KEY);
+		const user: LoggedUser | null = storedData ? JSON.parse(storedData) : null;
+
+		if (!user) return null;
+
+		return user.role;
+	}
+
 	isTokenValid() {
 		const token = this.getToken();
 
@@ -91,5 +97,13 @@ export class AuthService {
 		} catch (e) {
 			return false;
 		}
+	}
+
+	hasUserRole(userRole: UserRole) {
+		const role = this.getUserRole();
+
+		if (!role) return false;
+
+		return role === userRole;
 	}
 }

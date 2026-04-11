@@ -7,7 +7,7 @@ export interface RoleMetadata {
 }
 
 export const USER_ROLE_DETAILS: Record<UserRole, RoleMetadata> = {
-	[UserRole.SuperAdmin]: {
+	[UserRole.Admin]: {
 		label: 'System Director',
 		badgeClass: 'text-rose-600 bg-rose-50 dark:bg-rose-950/30 border-rose-100 dark:border-rose-800/50',
 		icon: 'shield'
@@ -16,11 +16,6 @@ export const USER_ROLE_DETAILS: Record<UserRole, RoleMetadata> = {
 		label: 'Inventory Manager',
 		badgeClass: 'text-amber-600 bg-amber-50 dark:bg-amber-950/30 border-amber-100 dark:border-amber-800/50',
 		icon: 'inventory'
-	},
-	[UserRole.Technician]: {
-		label: 'Technician',
-		badgeClass: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 border-emerald-100 dark:border-emerald-800/50',
-		icon: 'construction'
 	},
 	[UserRole.Employee]: {
 		label: 'Employee',
