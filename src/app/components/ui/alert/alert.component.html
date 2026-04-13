@@ -24,13 +24,26 @@
           }">
             {{ type === 'error' ? 'Error' : type === 'success' ? 'Success' : 'Attention' }}
         </h3>
+        @if (!isMessageArray(message)) {
         <p class="text-sm font-medium leading-tight" [ngClass]="{
-            'text-red-700/80 dark:text-red-300/80': type === 'error',
-            'text-emerald-700/80 dark:text-emerald-300/80': type === 'success',
-            'text-amber-700/80 dark:text-amber-300/80': type === 'warning'
+            'text-red-700 dark:text-red-300': type === 'error',
+            'text-emerald-700 dark:text-emerald-300': type === 'success',
+            'text-amber-700 dark:text-amber-300': type === 'warning'
          }">
             {{ message }}
         </p>
+        }
+        @else {
+        <ul class="text-sm font-medium leading-tight" [ngClass]="{
+            'text-red-700 dark:text-red-300': type === 'error',
+            'text-emerald-700 dark:text-emerald-300': type === 'success',
+            'text-amber-700 dark:text-amber-300': type === 'warning'
+         }">
+            @for (item of message; track item) {
+            <li>{{ item }}</li>
+            }
+        </ul>
+        }
     </div>
 
     <button (click)="onClose()"

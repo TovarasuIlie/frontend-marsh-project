@@ -4,15 +4,20 @@
         <div>
             <div class="flex items-center gap-2 mb-1.5">
                 <span class="h-1 w-5 bg-blue-600 rounded-full"></span>
-                <span class="text-[9px] font-black text-blue-600 uppercase tracking-[0.3em]">{{ userData()?.location }} SECURE ZONE</span>
+                <span class="text-[9px] font-black text-blue-600 uppercase tracking-[0.3em]">{{ userData()?.location }}
+                    SECURE ZONE</span>
             </div>
             <h1 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">Profile Overview</h1>
-            <p class="text-sm text-gray-500 font-medium">Monitoring <span class="text-gray-900 dark:text-white font-bold">{{ userData()?.devices?.length }} active deployments</span> for your account.</p>
+            <p class="text-sm text-gray-500 font-medium">Monitoring <span
+                    class="text-gray-900 dark:text-white font-bold">{{ userData()?.devices?.length }} active
+                    deployments</span> for your account.</p>
         </div>
 
-        <div class="flex items-center gap-4 p-3 pr-5 bg-white dark:bg-[#0f1115] rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm transition-all hover:shadow-md">
-            <div [ngClass]="roleInfo().badgeClass" 
-                 class="h-11 w-11 rounded-lg flex items-center justify-center border shadow-sm transition-transform hover:scale-105">
+        @if(userData()) {
+        <div
+            class="flex items-center gap-4 p-3 pr-5 bg-white dark:bg-[#0f1115] rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm transition-all hover:shadow-md">
+            <div [ngClass]="roleInfo().badgeClass"
+                class="h-11 w-11 rounded-lg flex items-center justify-center border shadow-sm transition-transform hover:scale-105">
                 <span class="material-icons text-xl">{{ roleInfo().icon }}</span>
             </div>
 
@@ -21,7 +26,8 @@
                     {{ userData()?.email }}
                 </p>
                 <div class="flex items-center gap-2 mt-0.5">
-                    <div class="flex items-center gap-1 px-1.5 py-0.5 rounded bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
+                    <div
+                        class="flex items-center gap-1 px-1.5 py-0.5 rounded bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
                         <span class="h-1 w-1 rounded-full bg-emerald-500 animate-pulse"></span>
                         <span class="text-[8px] font-black uppercase tracking-widest text-gray-500">
                             {{ roleInfo().label }}
@@ -30,64 +36,152 @@
                 </div>
             </div>
         </div>
+        } @else {
+        <div
+            class="bg-white dark:bg-[#0f1115] min-w-[300px] p-3 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
+            <div class="flex flex-row animate-pulse gap-4">
+                <div class="flex items-center justify-center">
+                    <div class="h-10 w-10 rounded-xl bg-orange-100/50 dark:bg-orange-900/20"></div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <div class="h-5 w-3/4 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
+
+                    <div class="h-4 w-24 bg-gray-100 dark:bg-gray-800/50 rounded-md"></div>
+                </div>
+            </div>
+        </div>
+        }
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="group bg-white dark:bg-[#0f1115] p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:border-blue-500/30 transition-all">
-            <div class="h-10 w-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+        @if(userData()) {
+        <div
+            class="group bg-white dark:bg-[#0f1115] p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:border-blue-500/30 transition-all">
+            <div
+                class="h-10 w-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
                 <span class="material-icons text-lg">inventory_2</span>
             </div>
             <p class="text-3xl font-black text-gray-900 dark:text-white">{{ userData()?.devices?.length }}</p>
             <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mt-1">Deployed Assets</p>
         </div>
 
-        <div class="group bg-white dark:bg-[#0f1115] p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:border-emerald-500/30 transition-all">
-            <div class="h-10 w-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-emerald-600 mb-4 group-hover:scale-110 transition-transform">
+        <div
+            class="group bg-white dark:bg-[#0f1115] p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:border-emerald-500/30 transition-all">
+            <div
+                class="h-10 w-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-emerald-600 mb-4 group-hover:scale-110 transition-transform">
                 <span class="material-icons text-lg">verified_user</span>
             </div>
             <p class="text-3xl font-black text-gray-900 dark:text-white">Secure</p>
             <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mt-1">System Integrity</p>
         </div>
 
-        <div class="group bg-white dark:bg-[#0f1115] p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:border-orange-500/30 transition-all">
-            <div class="h-10 w-10 rounded-xl bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-600 mb-4 group-hover:scale-110 transition-transform">
+        <div
+            class="group bg-white dark:bg-[#0f1115] p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:border-orange-500/30 transition-all">
+            <div
+                class="h-10 w-10 rounded-xl bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-600 mb-4 group-hover:scale-110 transition-transform">
                 <span class="material-icons text-lg">location_on</span>
             </div>
-            <p class="text-xl font-black text-gray-900 dark:text-white truncate uppercase tracking-tighter">{{ userData()?.location }}</p>
+            <p class="text-xl font-black text-gray-900 dark:text-white truncate uppercase tracking-tighter">{{
+                userData()?.location }}</p>
             <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mt-1">Assigned Branch</p>
         </div>
+        } @else {
+        <div
+            class="group bg-white dark:bg-[#0f1115] p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm">
+            <div class="animate-pulse">
+                <div class="h-10 w-10 rounded-xl bg-orange-50/50 dark:bg-orange-900/10 mb-4"></div>
+
+                <div class="h-6 w-3/4 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
+
+                <div class="h-2 w-20 bg-gray-100 dark:bg-gray-800/60 rounded-md mt-2.5"></div>
+            </div>
+        </div>
+
+        <div
+            class="group bg-white dark:bg-[#0f1115] p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm">
+            <div class="animate-pulse">
+                <div class="h-10 w-10 rounded-xl bg-orange-50/50 dark:bg-orange-900/10 mb-4"></div>
+
+                <div class="h-6 w-3/4 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
+
+                <div class="h-2 w-20 bg-gray-100 dark:bg-gray-800/60 rounded-md mt-2.5"></div>
+            </div>
+        </div>
+
+        <div
+            class="group bg-white dark:bg-[#0f1115] p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm">
+            <div class="animate-pulse">
+                <div class="h-10 w-10 rounded-xl bg-orange-50/50 dark:bg-orange-900/10 mb-4"></div>
+
+                <div class="h-6 w-3/4 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
+
+                <div class="h-2 w-20 bg-gray-100 dark:bg-gray-800/60 rounded-md mt-2.5"></div>
+            </div>
+        </div>
+        }
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        <div class="lg:col-span-2 bg-white dark:bg-[#0f1115] p-8 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm">
+
+        <div
+            class="lg:col-span-2 bg-white dark:bg-[#0f1115] p-8 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm">
             <div class="flex items-center justify-between mb-8">
                 <h3 class="text-lg font-black text-gray-900 dark:text-white tracking-tight">Hardware Portfolio</h3>
-                <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Live Updates</span>
             </div>
-            
+
             <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                @if (userData()) {
                 @for (device of userData()?.devices; track device.id) {
-                    <div class="group flex items-center justify-between p-4 rounded-xl bg-gray-50/50 dark:bg-gray-900/40 border border-transparent hover:border-blue-500/20 transition-all duration-200 cursor-pointer">
-                        <div class="flex items-center gap-4">
-                            <div class="h-11 w-11 rounded-xl bg-white dark:bg-gray-950 flex items-center justify-center text-blue-600 shadow-sm border border-gray-100 dark:border-gray-800 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                                <span class="material-icons text-lg">{{ getDeviceIcon(device.type) }}</span>
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors">{{ device.name }}</p>
-                                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider mt-0.5">{{ device.manufacturer }} • {{ device.ramAmount }}GB RAM</p>
-                            </div>
+                <div
+                    class="group flex items-center justify-between p-4 rounded-xl bg-gray-50/50 dark:bg-gray-900/40 border border-transparent hover:border-blue-500/20 transition-all duration-200 cursor-pointer">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="h-11 w-11 rounded-xl bg-white dark:bg-gray-950 flex items-center justify-center text-blue-600 shadow-sm border border-gray-100 dark:border-gray-800 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                            <span class="material-icons text-lg">{{ getDeviceIcon(device.type) }}</span>
                         </div>
-                        <span class="material-icons text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all">chevron_right</span>
+                        <div>
+                            <p
+                                class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors">
+                                {{ device.name }}</p>
+                            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider mt-0.5">{{
+                                device.manufacturer }} • {{ device.ramAmount }}GB RAM</p>
+                        </div>
                     </div>
+                </div>
+                } @empty {
+                <div class="flex flex-col items-center justify-center py-10 opacity-30">
+                    <span class="material-icons text-4xl">folder_off</span>
+                    <p class="text-[10px] font-black uppercase tracking-widest mt-2">Hardware Portfolio is empty</p>
+                </div>
+                }
+                } @else {
+                @for (item of [].constructor(3); track $index) {
+                <div
+                    class="group flex items-center justify-between p-4 rounded-xl bg-gray-50/50 dark:bg-gray-900/40 border border-transparent animate-pulse">
+                    <div class="flex items-center gap-4">
+
+                        <div
+                            class="h-11 w-11 rounded-xl bg-gray-200 dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-800">
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-md"></div>
+
+                            <div class="h-2 w-24 bg-gray-100 dark:bg-gray-800/60 rounded-md"></div>
+                        </div>
+                    </div>
+                </div>
+                }
                 }
             </div>
         </div>
 
         <div class="bg-white dark:bg-[#0f1115] p-8 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm">
             <h3 class="text-lg font-black text-gray-900 dark:text-white tracking-tight mb-8">Brand Ecosystem</h3>
-            
+
             <div class="space-y-6">
+                @if(userData()) {
                 @for (brand of uniqueManufacturers(); track brand) {
                 <div class="space-y-2">
                     <div class="flex justify-between items-end">
@@ -95,14 +189,29 @@
                         <span class="text-[11px] font-black dark:text-white">{{ getBrandPercent(brand) }}%</span>
                     </div>
                     <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-900 rounded-full overflow-hidden">
-                        <div class="h-full bg-blue-600 rounded-full transition-all duration-1000 ease-out" [style.width.%]="getBrandPercent(brand)"></div>
+                        <div class="h-full bg-blue-600 rounded-full transition-all duration-1000 ease-out"
+                            [style.width.%]="getBrandPercent(brand)"></div>
                     </div>
                 </div>
                 } @empty {
-                    <div class="flex flex-col items-center justify-center py-10 opacity-30">
-                        <span class="material-icons text-4xl">folder_off</span>
-                        <p class="text-[10px] font-black uppercase tracking-widest mt-2">No brand data</p>
+                <div class="flex flex-col items-center justify-center py-10 opacity-30">
+                    <span class="material-icons text-4xl">folder_off</span>
+                    <p class="text-[10px] font-black uppercase tracking-widest mt-2">No brand data</p>
+                </div>
+                }
+                } @else {
+                @for (item of [].constructor(5); track $index) {
+                <div class="space-y-2 animate-pulse">
+                    <div class="flex justify-between items-end">
+                        <div class="h-2 w-12 bg-gray-200 dark:bg-gray-800 rounded-sm"></div>
+                        <div class="h-3 w-8 bg-gray-200 dark:bg-gray-800 rounded-sm"></div>
                     </div>
+
+                    <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-900 rounded-full overflow-hidden">
+                        <div class="h-full bg-gray-200 dark:bg-gray-800 rounded-full w-[30%] opacity-50"></div>
+                    </div>
+                </div>
+                }
                 }
             </div>
         </div>

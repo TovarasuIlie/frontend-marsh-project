@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, Output, signal } from '@angular/core';
+import { Component, effect, EventEmitter, Input, OnChanges, Output, signal } from '@angular/core';
 import { User } from '../../../../models/user';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../../services/user.service';
 import { ToastService } from '../../../../services/toast.service';
 import { AlertComponent } from "../../../ui/alert/alert.component";
+import { finalize } from 'rxjs';
 
 @Component({
 	selector: 'app-employee-edit-modal',
@@ -24,13 +25,23 @@ export class EmployeeEditModalComponent implements OnChanges {
 
 	editForm!: FormGroup;
 
+	loading = signal<boolean>(false);
+
 	constructor(private fb: FormBuilder, private userService: UserService, private toastService: ToastService) {
 		this.editForm = this.fb.group({
-			name: ['', [Validators.required]],
+			name: ['', [Validators.required, Validators.pattern(/^[A-Z][a-z]+(?:[ \-][A-Z][a-z]+)$/)]],
 			role: [null, [Validators.required]],
-			location: ['', [Validators.required]],
+			location: ['', [Validators.required, Validators.pattern(/^[A-Z][a-z]+(?:[ \-][A-Z][a-z]+)*, [A-Z]{2}$/)]],
 			email: [{ value: '', disabled: true }]
 		});
+
+		effect(() => {
+			if (this.loading()) {
+				this.editForm.disable();
+			} else {
+				this.editForm.enable();
+			}
+		})
 	}
 
 	ngOnChanges() {
@@ -40,21 +51,31 @@ export class EmployeeEditModalComponent implements OnChanges {
 	}
 
 	onSubmit() {
-		if (this.editForm.valid) {
-			if (this.employee) {
-				this.userService.editUser(this.employee.id, this.editForm.value).subscribe({
-					next: (value) => {
-						this.updatedEmployee.emit(value);
-						this.toastService.show("Employee edited successfully!", 'success');
-						this.closeModal();
-					},
-					error: (err) => {
-						console.log(err);
-						this.errorMessage.set(err.error.message);
-					}
-				})
-			}
+		if (this.editForm.invalid) {
+			this.editForm.markAllAsTouched();
+			return;
 		}
+
+		if (this.employee) {
+				this.loading.set(true);
+				
+				this.userService.editUser(this.employee.id, this.editForm.value)
+					.pipe(finalize(() => this.loading.set(false)))
+					.subscribe({
+						next: (value) => {
+							this.updatedEmployee.emit(value);
+							this.toastService.show("Employee edited successfully!", 'success');
+							this.closeModal();
+						},
+						error: (err) => {
+							if (err.status) {
+								this.errorMessage.set(err.error.message);
+							} else {
+								this.errorMessage.set("We couldn't establish a secure handshake with the server. Ensure you have an active internet connection and try again.");
+							}
+						}
+					})
+			}
 	}
 
 	closeModal() {
@@ -63,6 +84,11 @@ export class EmployeeEditModalComponent implements OnChanges {
 	}
 
 	handleErrorClose() {
-		throw new Error('Method not implemented.');
+		this.errorMessage.set(null);
+	}
+
+	isInvalid(controlName: string): boolean {
+		const control = this.editForm.get(controlName);
+		return !!(control && control.invalid && (control.dirty || control.touched));
 	}
 }

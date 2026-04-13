@@ -3,12 +3,15 @@
     <div class="absolute inset-0 bg-gray-900/60 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-500"
         (click)="closeModal()"></div>
 
-    <div class="relative w-full max-w-lg bg-white dark:bg-[#0f1115] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-gray-800/50 overflow-hidden animate-in zoom-in-95 fade-in duration-300">
+    <div
+        class="relative w-full max-w-lg bg-white dark:bg-[#0f1115] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-gray-800/50 overflow-hidden animate-in zoom-in-95 fade-in duration-300">
 
         <div class="flex justify-between items-center px-8 py-6 border-b border-gray-50 dark:border-gray-900/50">
             <div>
-                <span class="text-[9px] font-black text-blue-600 uppercase tracking-[0.3em] mb-1 block">Devices Inventory</span>
-                <h3 class="text-xl font-black text-gray-900 dark:text-white tracking-tight">Edit Device Specifications</h3>
+                <span class="text-[9px] font-black text-blue-600 uppercase tracking-[0.3em] mb-1 block">Devices
+                    Inventory</span>
+                <h3 class="text-xl font-black text-gray-900 dark:text-white tracking-tight">Edit Device Specifications
+                </h3>
             </div>
             <button type="button" (click)="closeModal()"
                 class="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-900 text-gray-400 hover:text-red-500 transition-all duration-300">
@@ -62,8 +65,10 @@
                 </div>
 
                 <div class="relative group mb-8">
-                    <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-3 block ml-1">Internal Deployment Notes</span>
-                    <div class="bg-gray-50/50 dark:bg-gray-900/40 p-1 rounded-xl border border-gray-100/50 dark:border-gray-800/50 focus-within:border-blue-500 transition-all">
+                    <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-3 block ml-1">Internal
+                        Deployment Notes</span>
+                    <div
+                        class="bg-gray-50/50 dark:bg-gray-900/40 p-1 rounded-xl border border-gray-100/50 dark:border-gray-800/50 focus-within:border-blue-500 transition-all">
                         <textarea formControlName="description" rows="3"
                             placeholder="Add deployment notes or hardware conditions..."
                             class="w-full bg-transparent p-4 italic text-[13px] font-medium leading-relaxed dark:text-gray-300 outline-none resize-none"></textarea>
@@ -75,9 +80,32 @@
                         class="flex-1 px-8 py-3.5 rounded-xl border border-gray-200 dark:border-gray-800 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all">
                         Discard
                     </button>
-                    <button type="submit" [disabled]="editDeviceForm.invalid"
-                        class="flex-1 px-8 py-3.5 rounded-xl bg-gray-950 dark:bg-white text-white dark:text-gray-950 text-[10px] font-black uppercase tracking-widest shadow-xl hover:opacity-90 transition-all disabled:opacity-30 active:scale-95">
-                        Update Asset
+                    <button type="submit" [disabled]="editDeviceForm.invalid || loading()"
+                        class="flex flex-1 items-center justify-center px-8 py-3.5 rounded-xl bg-gray-950 dark:bg-white text-white dark:text-gray-950 text-[10px] font-black uppercase tracking-widest shadow-xl hover:opacity-90 transition-all disabled:opacity-30 active:scale-95">
+
+                        @if (!loading()) {
+                        <span class="animate-in fade-in zoom-in-95 duration-300">
+                            Update device
+                        </span>
+                        }
+
+                        @if (loading()) {
+                        <div class="flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                            <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 64 64" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle class="opacity-25" cx="32" cy="32" r="28" stroke="currentColor"
+                                    stroke-width="6">
+                                </circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M32 4C24.576 4 17.456 6.944 12.216 12.184L16.456 16.424C20.576 12.304 26.128 10 32 10V4Z">
+                                </path>
+                                <path class="opacity-100" fill="currentColor"
+                                    d="M59.5759 40.9762C60.9928 36.6232 61.3591 31.9965 60.6448 27.4748C59.9304 22.9531 58.1558 18.6647 55.466 14.9605">
+                                </path>
+                            </svg>
+                            <span class="opacity-80">Verifying...</span>
+                        </div>
+                        }
                     </button>
                 </div>
             </form>

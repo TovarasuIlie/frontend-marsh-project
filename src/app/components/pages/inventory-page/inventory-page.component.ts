@@ -20,9 +20,17 @@ import { FilterFieldComponent } from "../../ui/filter-field/filter-field.compone
 })
 export class InventoryPageComponent {
 
-	devices = signal<Device[]>([]);
+	devices = signal<Device[] | null>(null);
 
-	paginationMetadata = signal<PaginationMetadata | null>(null);
+	paginationMetadata = signal<PaginationMetadata>({
+		currentPage: 1,
+		totalCount: 10,
+		totalPages: 1,
+		pageSize: 10,
+		hasNext: false,
+		hasPrevious: false
+	});
+
 	pageSizeOptions = [10, 20, 50, 100];
 	paginationParameters: PaginationParameters = {
 		pageNumber: 1,
@@ -51,6 +59,7 @@ export class InventoryPageComponent {
 	}
 
 	loadDevices() {
+		this.devices.set(null);
 		this.deviceService.getAllDevices(this.paginationParameters.pageNumber, this.paginationParameters.pageSize, this.paginationParameters.filterQuery).subscribe({
 			next: (value: PagedResult<Device>) => {
 				this.devices.set(value.data);
@@ -81,14 +90,24 @@ export class InventoryPageComponent {
 	}
 
 	handleCloseDeleteModal() {
+		if((this.devices()?.length ?? 0) <= 1 && this.paginationParameters.pageNumber > 1) {
+			this.paginationParameters.pageNumber--;
+		}
 		this.loadDevices();
 		this.selectedDevice.set(null);
 	}
 
-	editDevice(deviceId: number | null, event: Event) {
+	handleCloseEditModal(updatedDevice: Device) {
+		this.selectedDevice.set(null);
+		this.devices.update(list => 
+			list ? list?.map(device => device.id === updatedDevice.id ? updatedDevice : device) : list
+		)
+	}
+
+	editDevice(device: Device | null, event: Event) {
 		event.stopPropagation();
 		this.isEditDeviceModalOpen = true;
-		this.selectedDeviceId.set(deviceId);
+		this.selectedDevice.set(device);
 	}
 
 	paginationChange(paginationParameters: PaginationParameters) {

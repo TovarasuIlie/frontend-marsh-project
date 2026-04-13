@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 })
 export class EmployeeDetailsModalComponent implements OnChanges {
 
-	employee!: User;
+	employee!: User | null;
 
 	@Input() isOpen = false;
 	@Input() employeeId!: number | null;
@@ -25,6 +25,7 @@ export class EmployeeDetailsModalComponent implements OnChanges {
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (this.employeeId && changes["employeeId"]) {
+			this.employee = null;
 			this.userService.getUser(this.employeeId).subscribe({
 				next: (value) => {
 					this.employee = value;

@@ -17,13 +17,20 @@ import { FilterFieldComponent } from "../../ui/filter-field/filter-field.compone
 	styleUrl: './assignment-page.component.css'
 })
 export class AssignmentPageComponent {
-	devices = signal<Device[]>([]);
+	devices = signal<Device[] | null>(null);
 
 	selectedDevice = signal<Device | null>(null);
 	isDetailsDeviceModalOpen = false;
 	isConfirmationModalOpen = false;
 
-	paginationMetadata = signal<PaginationMetadata | null>(null);
+	paginationMetadata = signal<PaginationMetadata>({
+		currentPage: 1,
+		totalCount: 8,
+		totalPages: 1,
+		pageSize: 8,
+		hasNext: false,
+		hasPrevious: false
+	});
 	pageSizeOptions = [8, 12, 24, 36];
 	paginationParameters: PaginationParameters = {
 		pageNumber: 1,
@@ -37,6 +44,7 @@ export class AssignmentPageComponent {
 	}
 
 	loadDevices() {
+		this.devices.set(null);
 		this.deviceService.getAllUnassignedDevices(this.paginationParameters.pageNumber, this.paginationParameters.pageSize, this.paginationParameters.filterQuery).subscribe({
 			next: (value: PagedResult<Device>) => {
 				this.devices.set(value.data);
@@ -62,15 +70,6 @@ export class AssignmentPageComponent {
 
 	handleConfirmAssign() {
 		this.loadDevices();
-	}
-
-	toggleAssignStatus(deviceId: number) {
-		this.deviceService.toggleDeviceAssignStatus(deviceId).subscribe({
-			next: (value: any) => {
-				this.toastService.show(value.message);
-				this.loadDevices();
-			}
-		})
 	}
 
 	paginationChange(paginationParameters: PaginationParameters) {

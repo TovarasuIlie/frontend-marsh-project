@@ -44,18 +44,6 @@
 
             <div class="h-[1px] bg-gray-50 dark:bg-gray-900 my-4 mx-2"></div>
 
-            @for (item of secondaryItems; track item.name) {
-            <a [routerLink]="item.path"
-                routerLinkActive="bg-gray-900 text-white dark:bg-white dark:text-gray-900"
-                class="flex items-center rounded-lg text-[13px] font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 transition-all group cursor-pointer"
-                [class.gap-4]="!sidebarService.isCollapsed()" [class.px-3]="!sidebarService.isCollapsed()"
-                [class.py-2.5]="!sidebarService.isCollapsed()"
-                [class.justify-center]="sidebarService.isCollapsed() && isDesktop()">
-                <span class="material-icons text-[20px] flex-shrink-0">{{ item.icon }}</span>
-                @if (!sidebarService.isCollapsed()) { <span class="flex-1 tracking-tight">{{ item.name }}</span> }
-            </a>
-            }
-
             <button 
                 (click)="authService.logout()"
                 class="flex items-center rounded-lg text-[13px] font-bold w-full text-red-500 hover:bg-red-600 hover:text-white transition-all group overflow-hidden whitespace-nowrap mt-1"

@@ -29,6 +29,9 @@
                     @if (registerForm.get('name')?.hasError('required')) {
                     <p class="text-[12px] text-red-500 font-black tracking-tighter">Name is required</p>
                     }
+                    @if (registerForm.get('name')?.hasError('pattern')) {
+                    <p class="text-[12px] text-red-500 font-black tracking-tighter">Invalid name format</p>
+                    }
                 </div>
                 }
             </div>
@@ -116,26 +119,49 @@
 
             <div class="space-y-1.5">
                 <label
-                    class="text-[9px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] ml-1">Work
-                    Location</label>
-                <select formControlName="location" [class.border-red-500]="isInvalid('location')"
-                    class="w-full px-4 py-3.5 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950/50 text-[13px] font-bold outline-none focus:border-blue-500 transition-all dark:text-white cursor-pointer appearance-none">
-                    <option value="" disabled selected>Select location</option>
-                    <option value="London HQ">London HQ</option>
-                    <option value="New York">New York Office</option>
-                    <option value="Remote">Remote</option>
-                </select>
+                    class="text-[9px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] ml-1">Email</label>
+                <input type="text" formControlName="location" placeholder="Cluj-Napoca, RO"
+                    [class.border-red-500]="isInvalid('location')"
+                    class="w-full px-4 py-3.5 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950/50 text-[13px] font-bold outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 transition-all dark:text-white placeholder:text-gray-300 dark:placeholder:text-gray-700">
 
                 @if (isInvalid('location')) {
-                <div class="ml-1">
-                    <p class="text-[12px] text-red-500 font-black tracking-tighter">Work Location required</p>
+                <div class="ml-1 space-y-1">
+                    @if (registerForm.get('location')?.hasError('required')) {
+                    <p class="text-[12px] text-red-500 font-black tracking-tighter">Location is required
+                    </p>
+                    }
+                    @if (registerForm.get('location')?.hasError('pattern')) {
+                    <p class="text-[12px] text-red-500 font-black tracking-tighter">Invalid location format</p>
+                    }
                 </div>
                 }
             </div>
 
-            <button type="submit" [disabled]="registerForm.invalid"
-                class="w-full bg-green-600 shadow-green-200 dark:shadow-green-950 text-white py-4 rounded-xl font-black text-[9px] tracking-[0.2em] shadow-xl uppercase hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-20 disabled:grayscale mt-4">
-                Register Account
+            <button type="submit" [disabled]="registerForm.invalid || loading()"
+                class="relative flex items-center justify-center w-full bg-green-600 shadow-green-200 dark:shadow-green-950 text-white py-4 rounded-xl font-black text-[9px] tracking-[0.2em] shadow-xl uppercase hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-20 disabled:grayscale mt-4">
+
+                @if (!loading()) {
+                <span class="animate-in fade-in zoom-in-95 duration-300">
+                    Register Account
+                </span>
+                }
+
+                @if (loading()) {
+                <div class="flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 64 64" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <circle class="opacity-25" cx="32" cy="32" r="28" stroke="currentColor" stroke-width="6">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M32 4C24.576 4 17.456 6.944 12.216 12.184L16.456 16.424C20.576 12.304 26.128 10 32 10V4Z">
+                        </path>
+                        <path class="opacity-100" fill="currentColor"
+                            d="M59.5759 40.9762C60.9928 36.6232 61.3591 31.9965 60.6448 27.4748C59.9304 22.9531 58.1558 18.6647 55.466 14.9605">
+                        </path>
+                    </svg>
+                    <span class="opacity-80">Verifying...</span>
+                </div>
+                }
             </button>
 
             <div class="pt-2 text-center">

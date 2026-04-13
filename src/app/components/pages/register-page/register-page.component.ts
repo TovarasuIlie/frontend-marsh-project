@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, effect, OnInit, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ThemeService } from '../../../services/theme.service';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { ToastService } from '../../../services/toast.service';
 import { AlertComponent } from "../../ui/alert/alert.component";
+import { finalize } from 'rxjs';
 
 @Component({
 	selector: 'app-register-page',
@@ -20,19 +21,29 @@ export class RegisterPageComponent implements OnInit {
 	showPassword = signal<boolean>(false);
 	showConfirmPassword = signal<boolean>(false);
 
-	constructor(private fb: FormBuilder, public themeService: ThemeService, private authService: AuthService, private toastService: ToastService, private router: Router) { }
+	loading = signal<boolean>(false);
+
+	constructor(private fb: FormBuilder, public themeService: ThemeService, private authService: AuthService, private toastService: ToastService, private router: Router) {
+		effect(() => {
+			if (this.loading()) {
+				this.registerForm.disable();
+			} else {
+				this.registerForm.enable();
+			}
+		})
+	}
 
 	ngOnInit(): void {
 		this.registerForm = this.fb.group({
-			name: ['', [Validators.required]],
+			name: ['', [Validators.required, Validators.pattern(/^[A-Z][a-z]+(?:[ \-][A-Z][a-z]+)$/)]],
 			email: ['', [Validators.required, Validators.email]],
 			password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[0-9])(?=.*[!@#$%^&*])/)]],
 			confirmPassword: ['', [Validators.required]],
-			location: ['', [Validators.required]]
+			location: ['', [Validators.required, Validators.pattern(/^[A-Z][a-z]+(?:[ \-][A-Z][a-z]+)*, [A-Z]{2}$/)]]
 		},
-		{
-			validators: this.passwordMatchValidator
-		});
+			{
+				validators: this.passwordMatchValidator
+			});
 	}
 
 	isInvalid(controlName: string): boolean {
@@ -41,19 +52,28 @@ export class RegisterPageComponent implements OnInit {
 	}
 
 	onSubmit() {
-		if (this.registerForm.valid) {
-			this.authService.register(this.registerForm.value).subscribe({
+		if (this.registerForm.invalid) {
+			this.registerForm.markAllAsTouched();
+			return;
+		}
+
+		this.loading.set(true);
+
+		this.authService.register(this.registerForm.value)
+			.pipe(finalize(() => this.loading.set(false)))
+			.subscribe({
 				next: () => {
 					this.toastService.show("You account created successfully!", "success");
 					this.router.navigateByUrl("/login");
 				},
 				error: (err) => {
-					this.errorMessage.set(err.error.message);
+					if (err.status) {
+						this.errorMessage.set(err.error.message);
+					} else {
+						this.errorMessage.set("We couldn't establish a secure handshake with the server. Ensure you have an active internet connection and try again.");
+					}
 				}
 			})
-		} else {
-			this.registerForm.markAllAsTouched();
-		}
 	}
 
 	handleErrorClose() {

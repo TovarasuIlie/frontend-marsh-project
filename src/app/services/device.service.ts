@@ -49,6 +49,6 @@ export class DeviceService {
 	}
 
 	toggleDeviceAssignStatus(deviceId: number) {
-		return this.http.patch(environment.API_URL + "Device/toggle-device-assign-status/" + deviceId, {});
+		return this.http.patch<Device>(environment.API_URL + "Device/toggle-device-assign-status/" + deviceId, {});
 	}
 }

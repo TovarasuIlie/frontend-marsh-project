@@ -8,7 +8,7 @@ export interface RoleMetadata {
 
 export const USER_ROLE_DETAILS: Record<UserRole, RoleMetadata> = {
 	[UserRole.Admin]: {
-		label: 'System Director',
+		label: 'Administrator',
 		badgeClass: 'text-rose-600 bg-rose-50 dark:bg-rose-950/30 border-rose-100 dark:border-rose-800/50',
 		icon: 'shield'
 	},

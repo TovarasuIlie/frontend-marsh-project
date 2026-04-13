@@ -21,9 +21,16 @@ import { literal } from '@angular/compiler';
 })
 export class EmployeesPageComponent {
 
-	employees = signal<User[]>([]);
+	employees = signal<User[] | null>(null);
 
-	paginationMetadata = signal<PaginationMetadata | null>(null);
+	paginationMetadata = signal<PaginationMetadata>({
+		currentPage: 1,
+		totalCount: 8,
+		totalPages: 1,
+		pageSize: 8,
+		hasNext: false,
+		hasPrevious: false
+	});
 	pageSizeOptions = [8, 12, 24, 36];
 	paginationParameters: PaginationParameters = {
 		pageNumber: 1,
@@ -45,6 +52,7 @@ export class EmployeesPageComponent {
 	}
 
 	loadEmployees() {
+		this.employees.set(null);
 		this.userService.getUsers(this.paginationParameters).subscribe({
 			next: (value) => {
 				this.employees.set(value.data);
@@ -85,7 +93,7 @@ export class EmployeesPageComponent {
 		this.isEditModalOpen = false
 		this.employeeSelected.set(null);
 		this.employees.update(list => 
-			list.map(emp => emp.id === updatedEmployee.id ? updatedEmployee : emp)
+			list ? list.map(emp => emp.id === updatedEmployee.id ? updatedEmployee : emp) : list
 		);
 	}
 

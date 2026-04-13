@@ -18,7 +18,11 @@
 		</div>
 
 		<div class="flex-1">
-			<p class="text-[12px] font-black tracking-tight text-gray-900 dark:text-white leading-tight">
+			<p class="text-[12px] font-black tracking-tight leading-tight" [ngClass]="{
+			'text-emerald-500': toast.type === 'success',
+			'text-red-500': toast.type === 'error',
+			'text-blue-500': toast.type === 'info'
+			}">
 				{{ toast.message }}
 			</p>
 		</div>

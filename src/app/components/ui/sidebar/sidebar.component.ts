@@ -22,10 +22,6 @@ export class SidebarComponent {
 		{ name: 'Employees', icon: 'groups_3', path: '/employees', role: UserRole.Admin },
 	];
 
-	secondaryItems = [
-		{ name: 'Settings', icon: 'tune', path: '/settings' }
-	];
-
 	expandedMenu = signal<string | null>(null);
 
 	constructor(public sidebarService: SideBarService, public authService: AuthService) { }

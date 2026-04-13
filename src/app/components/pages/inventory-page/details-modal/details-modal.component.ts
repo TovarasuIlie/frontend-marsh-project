@@ -16,12 +16,13 @@ export class DetailsModalComponent implements OnChanges {
 
 	@Output() close = new EventEmitter<void>();
 
-	device!: Device;
+	device!: Device | null;
 
 	constructor(private deviceService: DeviceService) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if(changes['deviceId'] && this.deviceId) {
+			this.device = null;
 			this.deviceService.getDeviceById(this.deviceId).subscribe(value => {
         		this.device = value;
 			})
