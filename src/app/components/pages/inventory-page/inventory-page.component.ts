@@ -8,11 +8,13 @@ import { DeleteDeviceModalComponent } from "./delete-device-modal/delete-device-
 import { EditDeviceModalComponent } from "./edit-device-modal/edit-device-modal.component";
 import { CommonModule } from '@angular/common';
 import { PaginationComponent } from "../../ui/pagination/pagination.component";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FilterFieldComponent } from "../../ui/filter-field/filter-field.component";
 
 @Component({
 	selector: 'app-inventory-page',
 	standalone: true,
-	imports: [CommonModule, DetailsModalComponent, AddNewDeviceModalComponent, DeleteDeviceModalComponent, EditDeviceModalComponent, PaginationComponent],
+	imports: [CommonModule, DetailsModalComponent, AddNewDeviceModalComponent, DeleteDeviceModalComponent, EditDeviceModalComponent, PaginationComponent, FilterFieldComponent],
 	templateUrl: './inventory-page.component.html',
 	styleUrl: './inventory-page.component.css'
 })
@@ -24,7 +26,8 @@ export class InventoryPageComponent {
 	pageSizeOptions = [10, 20, 50, 100];
 	paginationParameters: PaginationParameters = {
 		pageNumber: 1,
-		pageSize: this.pageSizeOptions[0]
+		pageSize: this.pageSizeOptions[0],
+		filterQuery: ""
 	}
 
 	selectedDeviceId = signal<number | null>(null);
@@ -35,14 +38,20 @@ export class InventoryPageComponent {
 	isDeleteConfirmationModalOpen = false;
 	isEditDeviceModalOpen = false;
 
-	constructor(private deviceService: DeviceService) {}
+	filterForm!: FormGroup;
+
+	constructor(private deviceService: DeviceService, private fb: FormBuilder) {
+		this.filterForm = this.fb.group({
+			querySearch: ['', [Validators.minLength(3)]],
+		})
+	}
 
 	ngOnInit() {
 		this.loadDevices();
 	}
 
 	loadDevices() {
-		this.deviceService.getAllDevices(this.paginationParameters.pageNumber, this.paginationParameters.pageSize).subscribe({
+		this.deviceService.getAllDevices(this.paginationParameters.pageNumber, this.paginationParameters.pageSize, this.paginationParameters.filterQuery).subscribe({
 			next: (value: PagedResult<Device>) => {
 				this.devices.set(value.data);
 				this.paginationMetadata.set(value.metadata);
@@ -64,7 +73,7 @@ export class InventoryPageComponent {
 		this.isDetailsDeviceModalOpen = false
 		this.selectedDeviceId.set(null);
 	}
- 
+
 	deleteDevice(device: Device | null, event: Event) {
 		event.stopPropagation();
 		this.isDeleteConfirmationModalOpen = true;
@@ -84,6 +93,21 @@ export class InventoryPageComponent {
 
 	paginationChange(paginationParameters: PaginationParameters) {
 		this.paginationParameters = paginationParameters;
+		this.loadDevices();
+	}
+
+	onRamAmountChange(ramAmount: number) {
+		this.filterForm.patchValue({
+			ramAmount: ramAmount
+		})
+	}
+
+	applyFilter(querySearch: string | null) {
+		if (querySearch) {
+			this.paginationParameters.filterQuery = querySearch;
+		} else {
+			this.paginationParameters.filterQuery = null;
+		}
 		this.loadDevices();
 	}
 }

@@ -14,5 +14,6 @@ export interface PaginationMetadata {
 
 export interface PaginationParameters {
     pageNumber: number,
-    pageSize: number
+    pageSize: number,
+    filterQuery: string | null
 }

@@ -1,6 +1,6 @@
 <div class="p-6 space-y-6 animate-in fade-in duration-700">
 
-    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
         <div>
             <div class="flex items-center gap-2 mb-1.5">
                 <span class="h-1 w-5 bg-blue-600 rounded-full"></span>
@@ -9,44 +9,9 @@
             <h1 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">Assignment Manager</h1>
             <p class="text-sm text-gray-500 font-medium mt-1">Deploy assets to users across global HQ locations</p>
         </div>
-
-        <div class="flex flex-col sm:flex-row gap-3">
-            <div class="p-1 bg-gray-100 dark:bg-gray-900 rounded-xl flex gap-1">
-                <button (click)="filterStatus.set('all')" 
-                    [class.bg-white]="filterStatus() === 'all'"
-                    [class.shadow-sm]="filterStatus() === 'all'"
-                    class="px-4 py-2 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all dark:text-gray-400">All</button>
-                <button (click)="filterStatus.set('assigned')" 
-                    [class.bg-white]="filterStatus() === 'assigned'"
-                    [class.shadow-sm]="filterStatus() === 'assigned'"
-                    class="px-4 py-2 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all dark:text-gray-400">Deployed</button>
-                <button (click)="filterStatus.set('available')" 
-                    [class.bg-white]="filterStatus() === 'available'"
-                    [class.shadow-sm]="filterStatus() === 'available'"
-                    class="px-4 py-2 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all dark:text-gray-400">Storage</button>
-            </div>
-
-            <div class="relative w-full sm:w-64">
-                <span class="material-icons absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
-                <input type="text" (input)="searchQuery.set($any($event.target).value)"
-                    placeholder="Search records..."
-                    class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-950 border border-gray-100 dark:border-gray-800 rounded-xl text-xs font-bold outline-none focus:border-blue-500 transition-all dark:text-white">
-            </div>
-        </div>
     </div>
 
-    @if (unassignedCount() > 0) {
-    <div class="flex items-center justify-between p-3.5 bg-emerald-50/40 dark:bg-emerald-900/10 border border-emerald-100/30 dark:border-emerald-800/20 rounded-xl px-6">
-        <div class="flex items-center gap-3">
-            <div class="h-8 w-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-600/20">
-                <span class="material-icons text-xs">inventory</span>
-            </div>
-            <p class="text-[10px] font-black text-emerald-800 dark:text-emerald-400 uppercase tracking-[0.1em]">
-                {{ unassignedCount() }} Assets ready for assignment
-            </p>
-        </div>
-    </div>
-    }
+    <app-filter-field [placeholderMessage]="'Search by name, manufacturer or processor or RAM...'" (filterChange)="applyFilter($event)" />
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
         @for (device of devices(); track device.id) {

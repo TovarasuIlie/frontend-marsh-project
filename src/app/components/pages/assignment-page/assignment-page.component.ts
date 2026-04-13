@@ -7,17 +7,16 @@ import { AssignmentModalComponent } from "./assignment-modal/assignment-modal.co
 import { ToastService } from '../../../services/toast.service';
 import { UnassignConfirmModalComponent } from "./unassign-confirm-modal/unassign-confirm-modal.component";
 import { PaginationComponent } from "../../ui/pagination/pagination.component";
+import { FilterFieldComponent } from "../../ui/filter-field/filter-field.component";
 
 @Component({
 	selector: 'app-assignment-page',
 	standalone: true,
-	imports: [CommonModule, AssignmentModalComponent, UnassignConfirmModalComponent, PaginationComponent],
+	imports: [CommonModule, AssignmentModalComponent, UnassignConfirmModalComponent, PaginationComponent, FilterFieldComponent],
 	templateUrl: './assignment-page.component.html',
 	styleUrl: './assignment-page.component.css'
 })
 export class AssignmentPageComponent {
-	searchQuery = signal('');
-	filterStatus = signal<'all' | 'assigned' | 'available'>('all');
 	devices = signal<Device[]>([]);
 
 	selectedDevice = signal<Device | null>(null);
@@ -28,7 +27,8 @@ export class AssignmentPageComponent {
 	pageSizeOptions = [8, 12, 24, 36];
 	paginationParameters: PaginationParameters = {
 		pageNumber: 1,
-		pageSize: this.pageSizeOptions[0]
+		pageSize: this.pageSizeOptions[0],
+		filterQuery: null
 	}
 
 
@@ -37,7 +37,7 @@ export class AssignmentPageComponent {
 	}
 
 	loadDevices() {
-		this.deviceService.getAllUnassignedDevices(this.paginationParameters.pageNumber, this.paginationParameters.pageSize).subscribe({
+		this.deviceService.getAllUnassignedDevices(this.paginationParameters.pageNumber, this.paginationParameters.pageSize, this.paginationParameters.filterQuery).subscribe({
 			next: (value: PagedResult<Device>) => {
 				this.devices.set(value.data);
 				this.paginationMetadata.set(value.metadata);
@@ -64,20 +64,6 @@ export class AssignmentPageComponent {
 		this.loadDevices();
 	}
 
-	// filteredDevices = computed(() => {
-	// 	const query = this.searchQuery().toLowerCase();
-	// 	const status = this.filterStatus();
-
-	// 	return this.devices().filter(d => {
-	// 		const matchesSearch = d.name.toLowerCase().includes(query) ||
-	// 			(d.currentUser?.toLowerCase().includes(query) ?? false);
-	// 		const matchesStatus = status === 'all' || d.status === status;
-	// 		return matchesSearch && matchesStatus;
-	// 	});
-	// });
-
-	unassignedCount = computed(() => this.devices().filter(d => d.assignedToUser == null).length);
-
 	toggleAssignStatus(deviceId: number) {
 		this.deviceService.toggleDeviceAssignStatus(deviceId).subscribe({
 			next: (value: any) => {
@@ -89,6 +75,16 @@ export class AssignmentPageComponent {
 
 	paginationChange(paginationParameters: PaginationParameters) {
 		this.paginationParameters = paginationParameters;
+		this.loadDevices();
+	}
+
+	applyFilter(querySearch: string | null) {
+		console.log(querySearch);
+		if (querySearch) {
+			this.paginationParameters.filterQuery = querySearch;
+		} else {
+			this.paginationParameters.filterQuery = null;
+		}
 		this.loadDevices();
 	}
 }

@@ -12,12 +12,20 @@ export class DeviceService {
 
 	constructor(private http: HttpClient) { }
 
-	getAllDevices(pageNumber: number = 1, pageSize: number = 5) {
-		return this.http.get<PagedResult<Device>>(environment.API_URL + "Device/get-devices?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+	getAllDevices(pageNumber: number = 1, pageSize: number = 5, filterQuery: string | null = null) {
+		if(!filterQuery || filterQuery === "") {
+			return this.http.get<PagedResult<Device>>(environment.API_URL + "Device/get-devices?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+		} else {
+			return this.http.get<PagedResult<Device>>(environment.API_URL + "Device/get-devices-filtred?pageNumber=" + pageNumber + "&pageSize=" + pageSize + "&filterQuery=" + filterQuery);
+		}
 	}
 
-	getAllUnassignedDevices(pageNumber: number = 1, pageSize: number = 5) {
-		return this.http.get<PagedResult<Device>>(environment.API_URL + "Device/get-devices-overview?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+	getAllUnassignedDevices(pageNumber: number = 1, pageSize: number = 5, filterQuery: string | null = null) {
+		if(!filterQuery || filterQuery === "") {
+			return this.http.get<PagedResult<Device>>(environment.API_URL + "Device/get-devices-overview?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+		} else {
+			return this.http.get<PagedResult<Device>>(environment.API_URL + "Device/get-devices-overview-filtred?pageNumber=" + pageNumber + "&pageSize=" + pageSize + "&filterQuery=" + filterQuery);
+		}
 	}
 
 	getDeviceById(deviceId: number) {

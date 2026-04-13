@@ -27,7 +27,8 @@ export class EmployeesPageComponent {
 	pageSizeOptions = [8, 12, 24, 36];
 	paginationParameters: PaginationParameters = {
 		pageNumber: 1,
-		pageSize: this.pageSizeOptions[0]
+		pageSize: this.pageSizeOptions[0],
+		filterQuery: ""
 	}
 
 	viewState = signal<string>("grid_view");
