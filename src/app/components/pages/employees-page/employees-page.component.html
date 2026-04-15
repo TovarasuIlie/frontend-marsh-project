@@ -1,0 +1,285 @@
+<div class="p-6 space-y-6 animate-in fade-in duration-700">
+
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+        <div>
+            <div class="flex items-center gap-2 mb-1.5">
+                <span class="h-1 w-5 bg-blue-600 rounded-full"></span>
+                <span class="text-[9px] font-black text-blue-600 uppercase tracking-[0.2em]">Logistics Hub</span>
+            </div>
+            <h1 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">Employees Manager</h1>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+            <div class="p-1 bg-gray-100 dark:bg-gray-900 rounded-xl flex gap-1">
+                <button (click)="viewState.set('grid_view')" [class.bg-white]="viewState() === 'grid_view'"
+                    [class.shadow-sm]="viewState() === 'grid_view'"
+                    class="px-4 py-2 font-black uppercase tracking-widest rounded-lg transition-all dark:text-gray-400">
+                    <span class="material-icons text-blue-600 text-sm">grid_view</span>
+                </button>
+                <button (click)="viewState.set('table_rows')" [class.bg-white]="viewState() === 'table_rows'"
+                    [class.shadow-sm]="viewState() === 'table_rows'"
+                    class="px-4 py-2 font-black uppercase tracking-widest rounded-lg transition-all dark:text-gray-400">
+                    <span class="material-icons text-blue-600 text-sm">table_rows</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @if(viewState() === 'grid_view') {
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+        @if (employees()) {
+        @for (employee of employees(); track employee.id) {
+        <div
+            class="group relative bg-white dark:bg-[#0f1115] rounded-2xl border border-gray-100 dark:border-gray-800 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+
+            <div class="flex justify-between items-start mb-6">
+                <div [ngClass]="getRoleInfo(employee.id)().badgeClass"
+                    class="flex items-center gap-1.5 px-2 py-0.5 rounded-md border border-transparent shadow-sm">
+                    <span class="material-icons text-[10px]">{{ getRoleInfo(employee.id)().icon }}</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest">
+                        {{ getRoleInfo(employee.id)().label }}
+                    </span>
+                </div>
+            </div>
+
+            <div (click)="openDetailModal(employee.id)"
+                class="flex flex-col items-center text-center mb-6 cursor-pointer">
+                <div class="relative mb-4">
+                    <div
+                        class="h-9 w-9 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-black text-xs shadow-md shadow-blue-500/10 z-10 relative overflow-hidden">
+                        {{ employee.name.charAt(0) }}
+                        <div
+                            class="absolute inset-0 bg-white/10 group-hover:translate-x-full transition-transform duration-700 -skew-x-12">
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="text-base font-black text-gray-900 dark:text-white leading-tight mb-1">{{ employee.name }}
+                </h3>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ employee.email }}</p>
+            </div>
+
+            <div
+                class="p-4 rounded-xl bg-gray-50/50 dark:bg-gray-900/50 border border-gray-100/50 dark:border-gray-800/50 mb-6">
+                <div class="flex flex-1 gap-2">
+                    <div>
+                        <span class="material-icons text-blue-600 text-2xl">location_on</span>
+                    </div>
+                    <div>
+                        <p class="text-[8px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1.5">
+                            Location</p>
+                        <p class="text-[11px] font-black text-gray-900 dark:text-white truncate uppercase">{{
+                            employee.location }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <button (click)="openEditModal(employee)" class="group relative flex-1 py-3 overflow-hidden rounded-xl bg-amber-500 hover:bg-amber-400 text-white border border-amber-400/50 shadow-[0_4px_20px_-5px_rgba(245,158,11,0.5)] hover:shadow-[0_8px_25px_-5px_rgba(245,158,11,0.6)] transition-all duration-300 active:scale-[0.97]">
+
+                    <div
+                        class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    </div>
+
+                    <div class="relative flex items-center justify-center gap-2">
+                        <span
+                            class="material-icons text-sm transition-transform group-hover:-rotate-12">fingerprint</span>
+                        <span class="text-[9px] font-black uppercase tracking-[0.25em]">Modify Access</span>
+                    </div>
+                </button>
+
+                <button (click)="openDeleteModal(employee)" class="group relative flex-1 py-3 overflow-hidden rounded-xl 
+               bg-red-600 hover:bg-red-500
+               text-white border border-red-400/50
+               shadow-[0_4px_20px_-5px_rgba(220,38,38,0.5)] 
+               hover:shadow-[0_8px_25px_-5px_rgba(220,38,38,0.6)]
+               transition-all duration-300 active:scale-[0.97]">
+
+                    <div
+                        class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    </div>
+
+                    <div class="relative flex items-center justify-center gap-1">
+                        <span
+                            class="material-icons text-sm transition-transform group-hover:rotate-12">delete_forever</span>
+                        <span class="text-[9px] font-black uppercase tracking-[0.25em]">Delete Profile</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+        } @empty {
+
+        }
+        } @else {
+        @for (item of [].constructor(paginationParameters.pageSize); track $index) {
+        <div
+            class="group relative bg-white dark:bg-[#0f1115] rounded-2xl border border-gray-100 dark:border-gray-800 p-6 shadow-sm animate-pulse">
+
+            <div class="flex justify-between items-start mb-6">
+                <div class="h-5 w-20 bg-gray-100 dark:bg-gray-800 rounded-md"></div>
+            </div>
+
+            <div class="flex flex-col items-center text-center mb-6">
+                <div class="h-9 w-9 rounded-lg bg-gray-200 dark:bg-gray-700 mb-4"></div>
+
+                <div class="h-4 w-32 bg-gray-300 dark:bg-gray-800 rounded-md mb-2"></div>
+
+                <div class="h-2 w-40 bg-gray-100 dark:bg-gray-800/60 rounded-md"></div>
+            </div>
+
+            <div
+                class="p-4 rounded-xl bg-gray-50/50 dark:bg-gray-900/50 border border-gray-100/50 dark:border-gray-800/50 mb-6">
+                <div class="flex gap-2">
+                    <div class="h-6 w-6 rounded bg-blue-100/50 dark:bg-blue-900/20"></div>
+                    <div class="space-y-2 flex-1">
+                        <div class="h-1.5 w-10 bg-gray-100 dark:bg-gray-800/60 rounded"></div>
+                        <div class="h-3 w-2/3 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <div class="flex-1 h-10 bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
+                <div class="flex-1 h-10 bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
+            </div>
+        </div>
+        }
+        }
+    </div>
+
+    @if(paginationMetadata()) {
+    <div class="mt-8 p-5 bg-white dark:bg-[#0f1115] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm">
+
+        <app-pagination [paginationMetadata]="paginationMetadata" [pageSizeOptions]="pageSizeOptions"
+            [paginationParameters]="paginationParameters" (confirm)="paginationChange($event)" />
+    </div>
+    }
+    }
+
+    @if(viewState() === 'table_rows') {
+    <div
+        class="bg-white dark:bg-[#0f1115] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-gray-50 dark:border-gray-900 bg-gray-50/30 dark:bg-gray-900/10">
+                        <th class="px-6 py-5 text-[9px] font-black text-gray-400 uppercase tracking-[0.15em]">Name and
+                            Email</th>
+                        <th class="px-6 py-5 text-[9px] font-black text-gray-400 uppercase tracking-[0.15em]">Role</th>
+                        <th class="px-6 py-5 text-[9px] font-black text-gray-400 uppercase tracking-[0.15em]">Location
+                        </th>
+                        <th
+                            class="px-6 py-5 text-[9px] font-black text-gray-400 uppercase tracking-[0.15em] text-right">
+                            Operations</th>
+                    </tr>
+                </thead>
+                @if (employees()) {
+                <tbody class="divide-y divide-gray-50/50 dark:divide-gray-900/50">
+                    @for (employee of employees(); track employee.id) {
+                    <tr
+                        class="hover:bg-blue-50/30 dark:hover:bg-blue-900/5 transition-all duration-200 group">
+
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="cursor-pointer"
+                                    (click)="openDetailModal(employee.id)"
+                                    >
+                                    <div
+                                        class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors">
+                                        {{ employee.name }}</div>
+                                    <div class="text-[9px] text-gray-400 font-bold uppercase tracking-wider">{{
+                                        employee.email }}</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <div class="flex justify-start">
+                                <div [ngClass]="getRoleInfo(employee.id)().badgeClass"
+                                    class="flex items-center gap-1.5 px-2 py-0.5 rounded-md border border-transparent shadow-sm w-fit">
+
+                                    <span class="material-icons text-[10px]">{{ getRoleInfo(employee.id)().icon
+                                        }}</span>
+
+                                    <span class="text-[10px] font-black uppercase tracking-widest">
+                                        {{ getRoleInfo(employee.id)().label }}
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <div class="text-[11px] font-bold text-gray-700 dark:text-gray-300">{{
+                                employee.location }}</div>
+                        </td>
+
+                        <td class="px-6 py-4" (click)="$event.stopPropagation()">
+                            <div class="flex items-center justify-end gap-2">
+                                <button (click)="openEditModal(employee)"
+                                    class="h-9 w-9 flex items-center justify-center rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-400 hover:text-blue-600 border border-transparent hover:border-blue-500/20 transition-all">
+                                    <span class="material-icons text-base">edit_note</span>
+                                </button>
+                                <button (click)="openDeleteModal(employee)"
+                                    class="h-9 w-9 flex items-center justify-center rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-400 hover:text-red-500 border border-transparent hover:border-red-500/20 transition-all">
+                                    <span class="material-icons text-base">delete_sweep</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    } @empty {
+
+                    }
+                </tbody>
+                } @else {
+                <tbody class="divide-y divide-gray-50/50 dark:divide-gray-900/50">
+                    @for (item of [].constructor(paginationParameters.pageSize); track $index) {
+                    <tr class="animate-pulse border-b border-gray-50 dark:border-gray-900/50">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="space-y-2">
+                                    <div class="h-3.5 w-32 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                                    <div class="h-2 w-40 bg-gray-100 dark:bg-gray-800/60 rounded"></div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <div class="flex justify-start">
+                                <div
+                                    class="h-5 w-24 bg-gray-100 dark:bg-gray-800/80 rounded-md border border-gray-50 dark:border-gray-800/50">
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <div class="h-3 w-28 bg-gray-100 dark:bg-gray-800/60 rounded"></div>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <div class="flex items-center justify-end gap-2">
+                                <div class="h-9 w-9 rounded-lg bg-gray-50 dark:bg-gray-900/50"></div>
+                                <div class="h-9 w-9 rounded-lg bg-gray-50 dark:bg-gray-900/50"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+                }
+            </table>
+        </div>
+        @if(paginationMetadata()) {
+        <div class="px-6 py-4 border-t border-gray-50 dark:border-gray-900 bg-gray-50/20 dark:bg-gray-900/10">
+            <app-pagination [paginationMetadata]="paginationMetadata" [pageSizeOptions]="pageSizeOptions"
+                [paginationParameters]="paginationParameters" (confirm)="paginationChange($event)" />
+        </div>
+        }
+    </div>
+    }
+    <app-employee-details-modal [isOpen]="isDetailModalOpen" [employeeId]="employeeSelectedId()"
+        (close)="isDetailModalOpen = false" />
+    <app-employee-edit-modal [isOpen]="isEditModalOpen" [employee]="employeeSelected()"
+        (close)="isEditModalOpen = false" (updatedEmployee)="handleEditModalClose($event)" />
+    <app-employee-delete-modal [isOpen]="isDeleteModalOpen" [employee]="employeeSelected()"
+        (confirm)="handleDeleteModalClose()" (close)="isDeleteModalOpen = false" />
+</div>

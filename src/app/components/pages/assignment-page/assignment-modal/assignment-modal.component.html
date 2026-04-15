@@ -1,0 +1,151 @@
+@if (isOpen && device) {
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+    <div class="absolute inset-0 bg-gray-900/60 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-500"
+        (click)="closeModal()"></div>
+
+    <div
+        class="relative w-full max-w-lg bg-white dark:bg-[#0f1115] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-gray-800/50 overflow-hidden animate-in zoom-in-95 fade-in duration-300">
+
+        <div class="flex justify-between items-center px-8 py-6 border-b border-gray-50 dark:border-gray-900/50">
+            <div>
+                <span class="text-[9px] font-black text-blue-600 uppercase tracking-[0.3em] mb-1 block">Assignment
+                    Manager</span>
+                <h3 class="text-xl font-black text-gray-900 dark:text-white tracking-tight">Device Specifications</h3>
+            </div>
+            <button type="button" (click)="closeModal()"
+                class="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-900 text-gray-400 hover:text-red-500 transition-all duration-300">
+                <span class="material-icons text-lg">close</span>
+            </button>
+        </div>
+
+        <div class="p-8 space-y-6">
+            <app-alert [message]="errorMessage()" [type]="'error'" (closed)="handleErrorClose()" />
+            <div
+                class="flex items-center gap-4 p-5 rounded-xl bg-gradient-to-br from-blue-50/50 to-white dark:from-blue-900/10 dark:to-transparent border border-blue-100/30 dark:border-blue-800/20">
+                <div
+                    class="h-14 w-14 flex-shrink-0 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+                    <span class="material-icons text-2xl">
+                        {{ device.type === 3 ? 'laptop' : 'smartphone' }}
+                    </span>
+                </div>
+                <div>
+                    <h4 class="text-lg font-black text-gray-900 dark:text-white leading-tight">{{ device.name }}</h4>
+                    <p class="text-[9px] font-black text-blue-600 uppercase tracking-[0.2em] mt-1">{{
+                        device.manufacturer }}</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-x-8 gap-y-6 px-1">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2 text-gray-400">
+                        <span class="material-icons text-[14px]">memory</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest">Processor</span>
+                    </div>
+                    <p class="text-sm font-bold text-gray-900 dark:text-gray-200 ml-5.5">{{ device.processor }}</p>
+                </div>
+
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2 text-gray-400">
+                        <span class="material-icons text-[14px]">storage</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest">Memory</span>
+                    </div>
+                    <p class="text-sm font-bold text-gray-900 dark:text-gray-200 ml-5.5">{{ device.ramAmount }} GB RAM
+                    </p>
+                </div>
+
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2 text-gray-400">
+                        <span class="material-icons text-[14px]">settings_input_component</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest">Environment</span>
+                    </div>
+                    <p class="text-sm font-bold text-gray-900 dark:text-gray-200 ml-5.5">{{ device.operatingSystem }}
+                    </p>
+                </div>
+
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2 text-gray-400">
+                        <span class="material-icons text-[14px]">terminal</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest">Build Version</span>
+                    </div>
+                    <p class="text-sm font-bold text-gray-900 dark:text-gray-200 ml-5.5">v{{ device.osVersion }}</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 pt-4 border-t border-gray-50 dark:border-gray-900">
+                <div>
+                    <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2 block ml-1">Internal
+                        Description</span>
+                    <div
+                        class="bg-gray-50/50 dark:bg-gray-900/40 p-4 rounded-xl border border-gray-100/50 dark:border-gray-800/50">
+                        <p class="text-[12px] text-gray-600 dark:text-gray-400 leading-relaxed italic font-medium">"{{
+                            device.description }}"</p>
+                    </div>
+                </div>
+
+                @if(showDescription()) {
+                <div class="animate-in slide-in-from-top-2 duration-500">
+                    <span
+                        class="text-[9px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest mb-2 block ml-1 flex items-center gap-1">
+                        <span class="material-icons text-[12px]">auto_awesome</span>
+                        AI Generated Analysis
+                    </span>
+                    <div
+                        class="bg-purple-50/30 dark:bg-purple-900/10 p-4 rounded-xl border border-purple-100/50 dark:border-purple-800/30">
+                        <p
+                            class="text-[12px] text-purple-900 dark:text-purple-200 leading-relaxed font-medium leading-tight">
+                            @if(deviceDescription()) {
+                            <span class="animate-in fade-in duration-500">
+                                {{ deviceDescription().message }}
+                            </span>
+                            } @else {
+                            <span class="opacity-70 animate-pulse tracking-wide italic">
+                                Ai is thinking...
+                            </span>
+                            <span class="flex gap-0.5">
+                                <span class="animate-bounce [animation-delay:-0.3s]">.</span>
+                                <span class="animate-bounce [animation-delay:-0.15s]">.</span>
+                                <span class="animate-bounce">.</span>
+                            </span>
+                            }
+                        </p>
+                    </div>
+                </div>
+                }
+            </div>
+
+            <div class="flex gap-3 pt-4">
+                <button (click)="generateDeviceDescription()"
+                    class="flex-1 px-4 py-3.5 rounded-xl border border-gray-200 dark:border-gray-800 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-gray-900 dark:hover:text-white transition-all duration-300">
+                    {{ deviceDescription() ? 'Regenerate AI' : 'AI Analysis' }}
+                </button>
+                <button (click)="toggleAssignStatus(device.id)" [disabled]="loading()"
+                    class="flex flex-1 items-center justify-center px-4 py-3.5 rounded-xl bg-gray-950 dark:bg-white text-white dark:text-gray-950 text-[10px] font-black uppercase tracking-widest shadow-xl hover:opacity-90 transition-all active:scale-95">
+
+                    @if (!loading()) {
+                    <span class="animate-in fade-in zoom-in-95 duration-300">
+                        Confirm Assignment
+                    </span>
+                    }
+
+                    @if (loading()) {
+                    <div class="flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                        <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 64 64" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle class="opacity-25" cx="32" cy="32" r="28" stroke="currentColor" stroke-width="6">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M32 4C24.576 4 17.456 6.944 12.216 12.184L16.456 16.424C20.576 12.304 26.128 10 32 10V4Z">
+                            </path>
+                            <path class="opacity-100" fill="currentColor"
+                                d="M59.5759 40.9762C60.9928 36.6232 61.3591 31.9965 60.6448 27.4748C59.9304 22.9531 58.1558 18.6647 55.466 14.9605">
+                            </path>
+                        </svg>
+                        <span class="opacity-80">Verifying...</span>
+                    </div>
+                    }
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+}

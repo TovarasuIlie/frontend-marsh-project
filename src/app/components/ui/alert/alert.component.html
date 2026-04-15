@@ -1,0 +1,60 @@
+@if (message) {
+<div role="alert" [ngClass]="{
+        'bg-red-50/80 border-red-100 dark:bg-red-900/10 dark:border-red-800/30': type === 'error',
+        'bg-emerald-50/80 border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-800/30': type === 'success',
+        'bg-amber-50/80 border-amber-100 dark:bg-amber-900/10 dark:border-amber-800/30': type === 'warning'
+     }"
+    class="group relative flex items-center gap-4 p-4 mb-6 rounded-2xl border backdrop-blur-xl animate-in slide-in-from-top-2 fade-in duration-300">
+
+    <div [ngClass]="{
+            'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400': type === 'error',
+            'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400': type === 'success',
+            'bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400': type === 'warning'
+         }" class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl shadow-sm">
+        <span class="material-icons text-xl leading-none">
+            {{ type === 'error' ? 'error_outline' : type === 'success' ? 'check_circle_outline' : 'warning_amber' }}
+        </span>
+    </div>
+
+    <div class="flex-1">
+        <h3 class="text-[10px] font-black uppercase tracking-[0.2em] mb-0.5" [ngClass]="{
+            'text-red-900 dark:text-red-200': type === 'error',
+            'text-emerald-900 dark:text-emerald-200': type === 'success',
+            'text-amber-900 dark:text-amber-200': type === 'warning'
+          }">
+            {{ type === 'error' ? 'Error' : type === 'success' ? 'Success' : 'Attention' }}
+        </h3>
+        @if (!isMessageArray(message)) {
+        <p class="text-sm font-medium leading-tight" [ngClass]="{
+            'text-red-700 dark:text-red-300': type === 'error',
+            'text-emerald-700 dark:text-emerald-300': type === 'success',
+            'text-amber-700 dark:text-amber-300': type === 'warning'
+         }">
+            {{ message }}
+        </p>
+        }
+        @else {
+        <ul class="text-sm font-medium leading-tight" [ngClass]="{
+            'text-red-700 dark:text-red-300': type === 'error',
+            'text-emerald-700 dark:text-emerald-300': type === 'success',
+            'text-amber-700 dark:text-amber-300': type === 'warning'
+         }">
+            @for (item of message; track item) {
+            <li>{{ item }}</li>
+            }
+        </ul>
+        }
+    </div>
+
+    <button (click)="onClose()"
+        class="opacity-40 hover:opacity-100 transition-opacity flex items-center justify-center p-1">
+        <span class="material-icons text-lg dark:text-white leading-none">close</span>
+    </button>
+
+    <div [ngClass]="{
+            'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]': type === 'error',
+            'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]': type === 'success',
+            'bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]': type === 'warning'
+         }" class="absolute left-0 top-1/4 bottom-1/4 w-1 rounded-r-full"></div>
+</div>
+}

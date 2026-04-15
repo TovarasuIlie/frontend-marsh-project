@@ -1,0 +1,139 @@
+@if (isOpen) {
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+    <div class="absolute inset-0 bg-gray-900/60 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-500"
+        (click)="closeModal()"></div>
+
+    <app-alert [message]="errorMessage()" [type]="'error'" (closed)="handleErrorClose()" />
+
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()"
+        class="relative w-full max-w-lg bg-white dark:bg-[#0f1115] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-100 dark:border-gray-800/50 overflow-hidden animate-in zoom-in-95 fade-in duration-300">
+
+        <div class="flex justify-between items-center px-8 py-6 border-b border-gray-50 dark:border-gray-900/50">
+            <div>
+                <span
+                    class="text-[9px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-[0.3em] mb-1 block">Administrative
+                    Tool</span>
+                <h3 class="text-xl font-black text-gray-900 dark:text-white tracking-tight">Edit Personnel</h3>
+            </div>
+            <button type="button" (click)="closeModal()"
+                class="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-900 text-gray-400 hover:text-red-500 transition-all duration-300">
+                <span class="material-icons text-lg">close</span>
+            </button>
+        </div>
+
+        @if (employee) {
+        <div class="p-8 space-y-8">
+            <div
+                class="flex items-center gap-5 p-5 rounded-xl bg-gradient-to-br from-emerald-50/50 to-white dark:from-emerald-900/10 dark:to-transparent border border-emerald-100/30 dark:border-emerald-800/20">
+                <div
+                    class="h-16 w-16 flex-shrink-0 rounded-2xl bg-emerald-600 flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-emerald-600/20">
+                    {{ employee.name.charAt(0) }}
+                </div>
+                <div class="flex-1 space-y-1">
+                    <label
+                        class="text-[8px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest ml-1">Full
+                        Name</label>
+                    <input type="text" formControlName="name" [class.border-red-500]="isInvalid('name')"
+                        [class.ring-1]="isInvalid('name')" [class.ring-red-500]="isInvalid('name')" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 rounded-lg py-2.5 px-3 
+                        text-xs font-bold text-gray-900 dark:text-white 
+                        focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 
+                        outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600">
+                    @if (isInvalid('name')) {
+                    <div class="ml-1 space-y-1">
+                        @if (editForm.get('name')?.hasError('required')) {
+                        <p class="text-[12px] text-red-500 font-black tracking-tighter">Name is required</p>
+                        }
+                        @if (editForm.get('name')?.hasError('pattern')) {
+                        <p class="text-[12px] text-red-500 font-black tracking-tighter">Invalid name format</p>
+                        }
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-x-8 gap-y-6 px-1">
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-gray-400">
+                        <span class="material-icons text-[14px]">badge</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest">Access Level</span>
+                    </div>
+                    <select formControlName="role"
+                        class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 rounded-lg py-2 px-3 text-xs font-bold text-gray-900 dark:text-white focus:border-emerald-500 outline-none cursor-pointer transition-all">
+                        <option [ngValue]="1">Admin</option>
+                        <option [ngValue]="2">Manager</option>
+                        <option [ngValue]="3">Employee</option>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-gray-400">
+                        <span class="material-icons text-[14px]">location_on</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest">Deployment</span>
+                    </div>
+                    <input type="text" formControlName="location" placeholder="e.g., Cluj-Napoca, RO"
+                        [class.border-red-500]="isInvalid('location')" [class.ring-1]="isInvalid('location')"
+                        [class.ring-red-500]="isInvalid('location')" class="w-full bg-gray-50 dark:bg-gray-950 border border-gray-100 dark:border-gray-800 rounded-lg py-2.5 px-3 
+                        text-xs font-bold text-gray-900 dark:text-white 
+                        focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 
+                        outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600">
+                    @if (isInvalid('location')) {
+                    <div class="ml-1 space-y-1">
+                        @if (editForm.get('location')?.hasError('required')) {
+                        <p class="text-[12px] text-red-500 font-black tracking-tighter">Location is required
+                        </p>
+                        }
+                        @if (editForm.get('location')?.hasError('pattern')) {
+                        <p class="text-[12px] text-red-500 font-black tracking-tighter">Invalid location format</p>
+                        }
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div
+                class="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-800/20 flex gap-3">
+                <span class="material-icons text-amber-500 text-xl">security</span>
+                <p class="text-[10px] font-medium text-amber-800 dark:text-amber-400 leading-relaxed">
+                    Elevating roles grants immediate access to sensitive data vaults. Ensure identity is verified before
+                    confirming.
+                </p>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button type="button" (click)="closeModal()"
+                    class="flex-1 px-4 py-3.5 rounded-xl bg-gray-100 dark:bg-gray-950 text-gray-500 text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 dark:hover:bg-gray-900 transition-all">
+                    Discard
+                </button>
+
+                <button type="submit" [disabled]="editForm.invalid || loading()"
+                    class="flex-[2] px-8 py-3.5 rounded-xl bg-green-600 shadow-green-200 dark:shadow-green-950 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-20 disabled:grayscale">
+
+                    @if (!loading()) {
+                    <span class="animate-in fade-in zoom-in-95 duration-300">
+                        Confirm Changes
+                    </span>
+                    }
+
+                    @if (loading()) {
+                    <div class="flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                        <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 64 64" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle class="opacity-25" cx="32" cy="32" r="28" stroke="currentColor" stroke-width="6">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M32 4C24.576 4 17.456 6.944 12.216 12.184L16.456 16.424C20.576 12.304 26.128 10 32 10V4Z">
+                            </path>
+                            <path class="opacity-100" fill="currentColor"
+                                d="M59.5759 40.9762C60.9928 36.6232 61.3591 31.9965 60.6448 27.4748C59.9304 22.9531 58.1558 18.6647 55.466 14.9605">
+                            </path>
+                        </svg>
+                        <span class="opacity-80">Verifying...</span>
+                    </div>
+                    }
+                </button>
+            </div>
+        </div>
+        }
+    </form>
+</div>
+}

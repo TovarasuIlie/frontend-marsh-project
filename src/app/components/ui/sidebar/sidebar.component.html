@@ -1,0 +1,68 @@
+<div class="fixed inset-y-0 left-0 z-50 flex pointer-events-none md:static md:pointer-events-auto h-full">
+    <aside [class.-translate-x-full]="sidebarService.isCollapsed()"
+        [class.translate-x-0]="!sidebarService.isCollapsed()"
+        class="h-full flex flex-col bg-white dark:bg-gray-950 border-r border-gray-100 dark:border-gray-800 transition-all duration-300 ease-in-out overflow-hidden pointer-events-auto md:translate-x-0 md:relative"
+        [class.md:w-64]="!sidebarService.isCollapsed()" [class.md:w-20]="sidebarService.isCollapsed()"
+        [class.w-72]="!sidebarService.isCollapsed()" [class.w-0]="sidebarService.isCollapsed()">
+
+        <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap transition-all duration-300 border-b border-gray-50 dark:border-gray-900/50"
+            [class.p-6]="!sidebarService.isCollapsed()" [class.p-5]="sidebarService.isCollapsed() && isDesktop()">
+            <div class="flex-shrink-0 rounded-lg bg-blue-600 p-2 shadow-lg shadow-blue-500/20">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                    stroke="white" class="h-5 w-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6v12m-3-2.818.879.659c1.546 1.16 3.743.494 4.272-1.333" />
+                </svg>
+            </div>
+            @if (!sidebarService.isCollapsed()) {
+            <a [routerLink]="['']" class="text-lg font-black text-gray-900 dark:text-white tracking-tighter uppercase">ApexBank</a>
+            }
+        </div>
+
+        <nav class="flex-1 space-y-1.5 mt-10 overflow-y-auto custom-scrollbar transition-all duration-300 px-3">
+
+            @for (item of filteredMenuItems(); track item.name) {
+            <a [routerLink]="item.path"
+                routerLinkActive="bg-black/10 text-black dark:bg-gray-900 dark:text-white shadow-lg shadow-black/5 dark:shadow-white/5"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="flex items-center rounded-lg text-[15px] font-bold text-gray-900 dark:text-gray-400 hover:bg-black/20 dark:hover:bg-gray-800 transition-all group cursor-pointer"
+                [class.gap-4]="!sidebarService.isCollapsed()" [class.px-3]="!sidebarService.isCollapsed()"
+                [class.py-2.5]="!sidebarService.isCollapsed()"
+                [class.justify-center]="sidebarService.isCollapsed() && isDesktop()">
+
+                <span class="material-icons text-[25px] group-hover:scale-110 transition-transform flex-shrink-0">{{
+                    item.icon }}</span>
+
+                @if (!sidebarService.isCollapsed()) {
+                <span class="flex-1 tracking-tight">{{ item.name }}</span>
+                }
+            </a>
+            }
+        </nav>
+
+        <div class="pb-6 space-y-1.5 transition-all duration-300 px-3">
+
+            <div class="h-[1px] bg-gray-50 dark:bg-gray-900 my-4 mx-2"></div>
+
+            <button 
+                (click)="authService.logout()"
+                class="flex items-center rounded-lg text-[13px] font-bold w-full text-red-500 hover:bg-red-600 hover:text-white transition-all group overflow-hidden whitespace-nowrap mt-1"
+                [class.gap-4]="!sidebarService.isCollapsed()" [class.px-3]="!sidebarService.isCollapsed()"
+                [class.py-2.5]="!sidebarService.isCollapsed()"
+                [class.justify-center]="sidebarService.isCollapsed() && isDesktop()">
+                <span class="material-icons text-[20px] flex-shrink-0">logout</span>
+                @if (!sidebarService.isCollapsed()) {
+                <span class="transition-opacity tracking-tight">Sign Out</span>
+                }
+            </button>
+        </div>
+    </aside>
+
+    <div class="relative pointer-events-auto">
+        <button (click)="toggleSidebar()"
+            class="absolute top-12 -left-1 flex h-10 w-10 items-center justify-center rounded-r-xl border border-l-0 border-gray-100 bg-white text-gray-400 shadow-xl hover:text-blue-600 dark:border-gray-800 dark:bg-gray-950 md:-left-3 md:h-6 md:w-6 md:rounded-lg md:border md:shadow-sm transition-all duration-300">
+            <span class="material-icons text-sm transition-transform duration-300"
+                [class.rotate-180]="sidebarService.isCollapsed()">chevron_left</span>
+        </button>
+    </div>
+</div>
