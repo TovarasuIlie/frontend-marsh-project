@@ -28,7 +28,7 @@ Initialize the local development server with hot-reload capabilities.
 ```bash
 ng serve
 ```
-Once the compilation is [SUCCESSFUL], navigate to the local terminal gateway:
+Once the compilation is **SUCCESSFUL**, navigate to the local terminal gateway:
 ```bash
 http://localhost:4200/
 ```
