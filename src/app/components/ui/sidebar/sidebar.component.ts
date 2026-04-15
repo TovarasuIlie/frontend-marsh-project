@@ -17,9 +17,9 @@ export class SidebarComponent {
 
 	menuItems = [
 		{ name: 'Dashboard', icon: 'grid_view', path: '' },
-		{ name: 'Inventory', icon: 'inventory_2', path: '/inventory' },
+		{ name: 'Inventory', icon: 'inventory_2', path: '/inventory', roles: [UserRole.InventoryManager, UserRole.Admin]},
 		{ name: 'Assignments', icon: 'assignment_ind', path: '/assignments' },
-		{ name: 'Employees', icon: 'groups_3', path: '/employees', role: UserRole.Admin },
+		{ name: 'Employees', icon: 'groups_3', path: '/employees', roles: [UserRole.Admin] },
 	];
 
 	expandedMenu = signal<string | null>(null);
@@ -36,9 +36,14 @@ export class SidebarComponent {
 
 	filteredMenuItems = computed(() => {
 		return this.menuItems.filter(item => {
-			if (!item.role) return true;
+			if (!item.roles) return true;
+			let isOk = false;
 
-			return this.authService.hasUserRole(item.role);
+			item.roles.forEach(r => {
+				isOk = isOk || this.authService.hasUserRole(r);
+			});
+
+			return isOk;
 		});
 	});
 

@@ -9,6 +9,7 @@ import { authGuard } from './guards/auth.guard';
 import { guestGuard } from './guards/guest.guard';
 import { EmployeesPageComponent } from './components/pages/employees-page/employees-page.component';
 import { adminGuard } from './guards/admin.guard';
+import { inventoryManagerGuard } from './guards/inventory-manager.guard';
 
 export const routes: Routes = [
     {
@@ -23,7 +24,7 @@ export const routes: Routes = [
             {
                 path: "inventory",
                 component: InventoryPageComponent,
-                canActivate: [authGuard]
+                canActivate: [authGuard, inventoryManagerGuard]
             },
             {
                 path: "assignments",
